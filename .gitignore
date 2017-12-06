@@ -6,3 +6,9 @@ flink-project/.classpath
 flink-project/.project
 flink-project/.settings
 sample-data/
+flink-project/*.class
+flink-project/*.iml
+flink-project/*.ipr
+flink-project/*.iws
+flink-project/.idea
+flink-project/out
