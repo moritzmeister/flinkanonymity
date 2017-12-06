@@ -63,6 +63,7 @@ object SocketTextStreamWordCount {
       .sum(1)
 
     counts print
+    /** counts.print().setParallelism(1) */
 
     env.execute("Scala SocketTextStreamWordCount Example")
   }

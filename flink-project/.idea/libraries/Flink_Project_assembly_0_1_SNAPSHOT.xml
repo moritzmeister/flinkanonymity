@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Flink Project-assembly-0.1-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/target/scala-2.11/Flink Project-assembly-0.1-SNAPSHOT.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
