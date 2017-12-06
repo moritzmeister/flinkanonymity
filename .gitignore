@@ -10,5 +10,5 @@ flink-project/*.class
 flink-project/*.iml
 flink-project/*.ipr
 flink-project/*.iws
-flink-project/.idea
+flink-project/.idea/
 flink-project/out
