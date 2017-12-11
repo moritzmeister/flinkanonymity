@@ -12,3 +12,4 @@ sample-data/
 *.iws
 flink-project/.idea/
 flink-project/out
+flink-project/mainRunner/target/
