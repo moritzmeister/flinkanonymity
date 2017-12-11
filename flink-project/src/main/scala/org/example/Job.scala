@@ -18,7 +18,8 @@ package org.example
  * limitations under the License.
  */
 
-import org.apache.flink.api.scala._
+//import org.apache.flink.api.scala._
+import org.apache.flink.streaming.api.scala._
 
 /**
  * Skeleton for a Flink Job.
@@ -38,7 +39,18 @@ import org.apache.flink.api.scala._
 object Job {
   def main(args: Array[String]) {
     // set up the execution environment
-    val env = ExecutionEnvironment.getExecutionEnvironment
+    // val env = ExecutionEnvironment.getExecutionEnvironment
+
+    val env = StreamExecutionEnvironment.getExecutionEnvironment
+
+    // env.setStreamTimeCharacteristic(TimeCharacteristic.IngestionTime)
+
+    val input: DataStream[String] = env.readTextFile("../sample-data/ipums_usa/usa_00001_sample.csv")
+
+    val split_input = input.flatMap { _.split(",") }
+
+    input.print()
+    split_input.print()
 
     /**
      * Here, you can start creating your execution plan for Flink.
