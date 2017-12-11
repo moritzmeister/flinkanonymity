@@ -1,0 +1,31 @@
+
+    val env = StreamExecutionEnvironment.getExecutionEnvironment
+
+    env.setStreamTimeCharacteristic(TimeCharacteristic.IngestionTime)
+
+    val input: DataStream[String] = env.readTextFile("/Users/moritzmeister/Documents/FlinkProjects/flinkanonymity/sample-data/ipums_usa/usa_00001_sample.csv")
+
+    val split_input = input.flatMap { _.split(",") }
+
+    input.print()
+    split_input.print()
+    val env = StreamExecutionEnvironment.getExecutionEnvironment
+
+    env.setStreamTimeCharacteristic(TimeCharacteristic.IngestionTime)
+
+    val input: DataStream[String] = env.readTextFile("/Users/moritzmeister/Documents/FlinkProjects/flinkanonymity/sample-data/ipums_usa/usa_00001_sample.csv")
+
+    val split_input = input.flatMap { _.split(",") }
+
+    input.print()
+    split_input.print()
+    val env = StreamExecutionEnvironment.getExecutionEnvironment
+
+    env.setStreamTimeCharacteristic(TimeCharacteristic.IngestionTime)
+
+    val input: DataStream[String] = env.readTextFile("/Users/moritzmeister/Documents/FlinkProjects/flinkanonymity/sample-data/ipums_usa/usa_00001_sample.csv")
+
+    val split_input = input.flatMap { _.split(",") }
+
+    input.print()
+    split_input.print()
