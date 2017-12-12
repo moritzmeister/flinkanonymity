@@ -1,3 +1,4 @@
+package datatypes;
 /**
  * CensusData
  * Datatype to contain 18 data parameters:

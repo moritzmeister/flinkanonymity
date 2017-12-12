@@ -1,5 +1,5 @@
 package org.example
-//import ..java.datatypes.CensusData
+import  datatypes.CensusData
 
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -46,9 +46,9 @@ object Job {
 
     // env.setStreamTimeCharacteristic(TimeCharacteristic.IngestionTime)
 
-    val input: DataStream[String] = env.readTextFile("../sample-data/ipums_usa/usa_00001_sample.csv")
+    val input: DataStream[CensusData] = new CensusData(env.readTextFile("../sample-data/ipums_usa/usa_00001_sample.csv"))
 
-    val split_input = input.flatMap { _.split(",") }
+    //val split_input = input.flatMap { _.split(",") }
 
     input.print()
     split_input.print()
