@@ -48,6 +48,8 @@ object Job {
 
     val input: DataStream[CensusData] = new CensusData(env.readTextFile("../sample-data/ipums_usa/usa_00001_sample.csv"))
 
+    // From Data Artisans example: val rides = env.addSource(new TaxiRideSource(input, maxDelay, speed))
+
     //val split_input = input.flatMap { _.split(",") }
 
     input.print()
