@@ -31,8 +31,5 @@ sample-data/
 
 # Maven
 flink-project-java/log/
-<<<<<<< HEAD
 flink-project-java/target/
-=======
-flink-project-java/target/
->>>>>>> 32c52546ffac6604b752f6046cd49de1f84eab54
+
