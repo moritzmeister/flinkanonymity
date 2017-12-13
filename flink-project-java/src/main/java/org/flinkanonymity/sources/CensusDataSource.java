@@ -1,14 +1,11 @@
-package source;
-
+package org.flinkanonymity.sources;
 
 // Custom classes
-import  datatypes.CensusData;
+import  org.flinkanonymity.datatypes.CensusData;
 
 
 // Flink
 import org.apache.flink.streaming.api.functions.source.SourceFunction;
-
-
 
 // Java
 import java.io.BufferedReader;
