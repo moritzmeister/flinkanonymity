@@ -1,3 +1,16 @@
+# Mac
+.DS_Store
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# Intellij
+# Scala project
+flink-project/.idea/
+flink-project/out
+flink-project/mainRunner/target/
 flink-project/bin/
 flink-project/project/
 flink-project/target/
@@ -5,12 +18,17 @@ flink-project/.cache
 flink-project/.classpath
 flink-project/.project
 flink-project/.settings
-sample-data/
-*.class
+
+# Java
+flink-project-java/.idea/
+
+# General
 *.iml
-*.ipr
 *.iws
-flink-project/.idea/
-flink-project/out
-flink-project/mainRunner/target/
-.DS_Store
+*.class
+*.ipr
+sample-data/
+
+# Maven
+flink-project-java/log/
+flink-project-java/target/
