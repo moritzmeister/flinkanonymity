@@ -27,11 +27,20 @@ public class Job {
 
         DataStream<CensusData> data = env.addSource(new CensusDataSource(dataFilePath));
 
-        // Get Tuple
+        // While true
+
+        // Read new tuple
 
         // Generalize Quasi Identifiers
 
         // Get bucket through hashmap
+
+        // If bucket is worknode
+            // output tuple
+        // else bucket.add()
+            // if bucket satisfies k-anonymity
+                // set bucket as worknode
+                // get tuples and drop bucket
 
         data.print();
 
