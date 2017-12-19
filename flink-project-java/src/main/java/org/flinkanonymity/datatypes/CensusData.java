@@ -16,14 +16,36 @@ package org.flinkanonymity.datatypes;
  * - RACE
  * - RACED - racedetails
  * - BPL - birthplace
- * - BPLD - birthplace details
+ * - BPLD - birthplace detailsf
  * - EDUC - EDUCATION
  * - EDUCD - EDUCATION DETAILS
  * - OCC - OCCUPATION
  * - INCWAGE - INCOME WAGE
  */
 
-public class CensusData {
+public class CensusData{
+
+    public CensusData(){
+        this.year = -1;
+        this.serial = -1;
+        this.datanum = -1;
+        this.hhwt = -1;
+        this.gq = -1;
+        this.pernum = -1;
+        this.perwt = -1;
+        this.sex = -1;
+        this.age = -1;
+        this.marst = -1;
+        this.race = -1;
+        this.raced = -1;
+        this.bpl = -1;
+        this.bpld = -1;
+        this.educ = -1;
+        this.educd = -1;
+        this.occ = -1;
+        this.incwage = -1;
+    }
+
     public CensusData(int year, int datanum, int serial , int hhwt, int gq, int pernum, int perwt, int sex
             ,int age, int marst, int race, int raced, int bpl, int bpld, int educ, int educd, int occ, int incwage) {
         /* Constructs a CensusData Object from 18 integer inputs.*/
@@ -119,5 +141,17 @@ public class CensusData {
         sb.append(occ).append(",");
         sb.append(incwage);
         return sb.toString();
+    }
+
+    @Override
+    public int hashCode() {
+        // Do something here
+        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        // Do something here
+        return super.equals(obj);
     }
 }
