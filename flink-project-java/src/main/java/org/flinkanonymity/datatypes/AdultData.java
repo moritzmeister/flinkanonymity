@@ -55,7 +55,7 @@ public class AdultData {
 
     public AdultData(String line){
         /* Constructs a CensusData Object from a comma separated string input. */
-        String[] args = line.split(",");
+        String[] args = line.split(";");
 
         if (args.length != 9) {
             throw new RuntimeException("Number of arguments does not equal 9: " + line);
