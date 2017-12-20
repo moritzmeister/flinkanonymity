@@ -149,7 +149,7 @@ public class AdultData {
     public String toString() {
         /* Returns the object attributes as a comma separated string */
         StringBuilder sb = new StringBuilder();
-        sb.append("CensusData Object: ");
+        sb.append("AdultData Object: ");
         sb.append(sex).append(",");
         sb.append(age).append(",");
         sb.append(race).append(",");
