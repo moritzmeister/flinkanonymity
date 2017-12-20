@@ -21,7 +21,25 @@ public class Job {
         ParameterTool params = ParameterTool.fromArgs(args);
         // final String filePath = params.getRequired("input");
 
-        String dataFilePath = "../sample-data/ipums_usa/usa_00001_sample.csv";
+        // Set file paths
+        String dataFilePath = "../sample-data/arx_adult/adult_subset.csv";
+        String sex_hierarchy = "../sample-data/arx_adult/adult_hierarchy_sex.csv";
+        String age_hierarchy = "../sample-data/arx_adult/adult_hierarchy_age.csv";
+        String race_hierarchy = "../sample-data/arx_adult/adult_hierarchy_race.csv";
+        // String marst_hierarchy = "../sample-data/arx_adult/adult_hierarchy_marital-status.csv";
+        // String educ_hierarchy = "../sample-data/arx_adult/adult_hierarchy_education.csv";
+        // String country_hierarchy = "../sample-data/arx_adult/adult_hierarchy_native-country.csv";
+        // String workclass_hierarchy = "../sample-data/arx_adult/adult_hierarchy_workclass.csv";
+        // String occ_hierarchy = "../sample-data/arx_adult/adult_hierarchy_occupation.csv";
+        // String salary_hierarchy = "../sample-data/arx_adult/adult_hierarchy_salary-class.csv";
+
+        // Initialize generalizations
+        Generalization age = new Generalization("age", age_hierarchy, 1);
+        Generalization sex = new Generalization("sex", sex_hierarchy, 1);
+        Generalization race = new Generalization("race", race_hierarchy,1);
+
+        // Initialize QuasiIdentifier
+        QuasiIdentifier QID = new QuasiIdentifier(age, sex, race);
 
         // Set up Hashmap
         HashMap<AdultData, Bucket> hashMap = new HashMap<>();
@@ -41,6 +59,7 @@ public class Job {
 
 
         // Generalize Quasi Identifiers
+
         DataStream<AdultData> genData = data.map(asdasda);
 
         DataStream<AdultData> output = genData.flatMap(new FlatMapFunction<AdultData, AdultData>() {
@@ -68,14 +87,6 @@ public class Job {
                 }
             }
         });
-
-        /*
-        // If bucket is worknode
-
-        */
-
-
-
 
 
         data.print();
