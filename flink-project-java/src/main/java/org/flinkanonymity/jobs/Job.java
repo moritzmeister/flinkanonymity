@@ -9,6 +9,8 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.co.RichCoFlatMapFunction;
 import org.apache.flink.util.Collector;
 import org.apache.flink.api.common.functions.FlatMapFunction;
+import org.apache.flink.api.common.functions.MapFunction;
+
 
 import org.flinkanonymity.datatypes.AdultData;
 import org.flinkanonymity.datatypes.Bucket;
@@ -19,6 +21,10 @@ import org.flinkanonymity.sources.AdultDataSource;
 import java.util.HashMap;
 
 public class Job {
+    // Set up QID and Hashmap for global use.
+    static QuasiIdentifier QID;
+    static HashMap<AdultData, Bucket> hashMap;
+
     public static void main(String[] args) throws Exception {
         ParameterTool params = ParameterTool.fromArgs(args);
         // final String filePath = params.getRequired("input");
@@ -27,9 +33,9 @@ public class Job {
         String dataFilePath = "../sample-data/arx_adult/adult_subset.csv";
         String sex_hierarchy = "../sample-data/arx_adult/adult_hierarchy_sex.csv";
         String age_hierarchy = "../sample-data/arx_adult/adult_hierarchy_age.csv";
-        String race_hierarchy = "../sample-data/arx_adult/adult_hierarchy_race.csv";
+        // String race_hierarchy = "../sample-data/arx_adult/adult_hierarchy_race.csv";
         // String marst_hierarchy = "../sample-data/arx_adult/adult_hierarchy_marital-status.csv";
-        // String educ_hierarchy = "../sample-data/arx_adult/adult_hierarchy_education.csv";
+        String educ_hierarchy = "../sample-data/arx_adult/adult_hierarchy_education.csv";
         // String country_hierarchy = "../sample-data/arx_adult/adult_hierarchy_native-country.csv";
         // String workclass_hierarchy = "../sample-data/arx_adult/adult_hierarchy_workclass.csv";
         // String occ_hierarchy = "../sample-data/arx_adult/adult_hierarchy_occupation.csv";
@@ -37,14 +43,14 @@ public class Job {
 
         // Initialize generalizations
         Generalization age = new Generalization("age", age_hierarchy, 1);
-        Generalization sex = new Generalization("sex", sex_hierarchy, 1);
-        Generalization race = new Generalization("race", race_hierarchy,1);
+        Generalization sex = new Generalization("sex", sex_hierarchy, 0);
+        Generalization educ = new Generalization("educ", educ_hierarchy,2);
+
+        // Generalization race = new Generalization("race", educ_hierarchy,1);
 
         // Initialize QuasiIdentifier
-        QuasiIdentifier QID = new QuasiIdentifier(age, sex, race);
+        QID = new QuasiIdentifier(age, sex, educ);
 
-        // Set up Hashmap - has to be final in order to be used in HashMapFunction later on.
-        final HashMap<AdultData, Bucket> hashMap = new HashMap<>();
 
         // Define k in k-anonymity
         final int k = 4;
@@ -59,38 +65,48 @@ public class Job {
         // DataStreamSink<AdultData> output = new DataStreamSink<AdultData>();
         // output.setParallelism(1);
 
-
         // Generalize Quasi Identifiers
-        DataStream<AdultData> genData = data; //.map(asdasda);
+        DataStream<AdultData> genData = data.map(new Generalize());
 
-        DataStream<AdultData> output = genData.flatMap(new FlatMapFunction<AdultData, AdultData>() {
-            @Override
-            public void flatMap(AdultData tuple, Collector<AdultData> out) throws Exception {
-                // get bucket
-                Bucket b = hashMap.get(tuple);
-                if (b.isWorkNode()) {
-                    // output tuple
-                    out.collect(tuple);
-                } else {
-                    b.add(tuple);
-                    if (b.isKAnonymous(k)) { // if bucket satisfies k-anonymity
-                        // set bucket as worknode
-                        b.markAsWorkNode();
 
-                        // get tuples and drop bucket
-                        AdultData[] tuples = b.dropBuffer();
+        DataStream<AdultData> output = genData.flatMap(new Anonymize());
 
-                        // output tuples
-                        for (AdultData t : tuples) {
-                            out.collect(t);
-                        }
-                    }
-                }
-            }
-        });
 
         output.print();
 
+        // genData.print();
         env.execute();
+    }
+    public static class Generalize implements MapFunction<AdultData, AdultData>{
+        @Override
+        public AdultData map(AdultData adult) throws Exception{
+            return QID.generalize(adult);
+        }
+    }
+
+    public static class Anonymize implements FlatMapFunction<AdultData, AdultData>{
+        @Override
+        public void flatMap(AdultData tuple, Collector<AdultData> out) throws Exception {
+            // get bucket
+            Bucket b = hashMap.get(tuple);
+            if (b.isWorkNode()) {
+                // output tuple
+                out.collect(tuple);
+            } else {
+                b.add(tuple);
+                if (b.isKAnonymous(k)) { // if bucket satisfies k-anonymity
+                    // set bucket as worknode
+                    b.markAsWorkNode();
+
+                    // get tuples and drop bucket
+                    AdultData[] tuples = b.dropBuffer();
+
+                    // output tuples
+                    for (AdultData t : tuples) {
+                        out.collect(t);
+                    }
+                }
+            }
+        }
     }
 }
