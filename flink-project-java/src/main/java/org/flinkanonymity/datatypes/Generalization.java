@@ -44,9 +44,11 @@ public class Generalization {
             e.printStackTrace();
         }
     }
+
     public String getHierarchy(String key){
         return this.hierarchy.get(key);
     }
+
     public void putHierarchy(String key, String val){
         this.hierarchy.put(key, val);
     }
