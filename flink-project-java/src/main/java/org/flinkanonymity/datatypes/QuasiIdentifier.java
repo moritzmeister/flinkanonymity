@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class QuasiIdentifier {
 
-    public ArrayList<Generalization> qid;
+    public ArrayList<Generalization> qid = new ArrayList<Generalization>();
 
     public QuasiIdentifier(Generalization... args) {
         /* Constructs a Quasi Identifier from several Generalizations */

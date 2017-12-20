@@ -27,7 +27,7 @@ public class Generalization {
 
         // initialize parameters and empty HashMap
         String line = "";
-        String cvsSplitBy = ",";
+        String cvsSplitBy = ";";
 
         //read file and initialize the generalization hierarchy in a HashMap
         try (BufferedReader br = new BufferedReader(new FileReader(this.dataFilePath))) {
