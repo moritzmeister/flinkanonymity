@@ -33,6 +33,7 @@ public class Bucket {
     public AdultData[] dropBuffer(){
         // Returns everything in the buffer and clears it.
         AdultData[] out = {};
+        this.bufferSize = 0;
         out = buffer.toArray(out);
         buffer.clear();
         return out;

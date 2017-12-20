@@ -146,6 +146,14 @@ public class AdultData {
         return temp;
     }
 
+    public String QuasiToString(QuasiIdentifier QID) {
+        StringBuilder sb = new StringBuilder();
+        for (Generalization gen : QID.qid) {
+            sb.append(this.getAttribute(gen.attr)).append(";");
+        }
+        return sb.toString();
+    }
+
     public String toString() {
         /* Returns the object attributes as a comma separated string */
         StringBuilder sb = new StringBuilder();

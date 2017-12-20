@@ -23,7 +23,8 @@ import java.util.HashMap;
 public class Job {
     // Set up QID and Hashmap for global use.
     static QuasiIdentifier QID;
-    static HashMap<AdultData, Bucket> hashMap;
+    static HashMap<String, Bucket> hashMap;
+    static int k = 10;
 
     public static void main(String[] args) throws Exception {
         ParameterTool params = ParameterTool.fromArgs(args);
@@ -44,16 +45,14 @@ public class Job {
         // Initialize generalizations
         Generalization age = new Generalization("age", age_hierarchy, 1);
         Generalization sex = new Generalization("sex", sex_hierarchy, 0);
-        Generalization educ = new Generalization("educ", educ_hierarchy,2);
+        Generalization educ = new Generalization("educ", educ_hierarchy,1);
 
         // Generalization race = new Generalization("race", educ_hierarchy,1);
 
         // Initialize QuasiIdentifier
         QID = new QuasiIdentifier(age, sex, educ);
+        hashMap = new HashMap<>();
 
-
-        // Define k in k-anonymity
-        final int k = 4;
 
         // Setting up Environment
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
@@ -88,25 +87,27 @@ public class Job {
         @Override
         public void flatMap(AdultData tuple, Collector<AdultData> out) throws Exception {
             // get bucket
-            Bucket b = hashMap.get(tuple);
-            if (b.isWorkNode()) {
-                // output tuple
-                out.collect(tuple);
+            String TupleQuasiString = tuple.QuasiToString(QID);
+            if (!hashMap.containsKey(TupleQuasiString)) { // If this bucket has never been reached before
+                hashMap.put(TupleQuasiString, new Bucket()); // Create a bucket
+            }
+            Bucket b = hashMap.get(TupleQuasiString); // Get the bucket
+            /*
+            if (b.isWorkNode()) { // If bucket is worknode
+                out.collect(tuple); // output tuple
+
             } else {
-                b.add(tuple);
-                if (b.isKAnonymous(k)) { // if bucket satisfies k-anonymity
-                    // set bucket as worknode
-                    b.markAsWorkNode();
-
-                    // get tuples and drop bucket
-                    AdultData[] tuples = b.dropBuffer();
-
-                    // output tuples
-                    for (AdultData t : tuples) {
-                        out.collect(t);
-                    }
+            */
+            b.add(tuple);
+            if (b.isKAnonymous(k)) { // if bucket satisfies k-anonymity
+                // b.markAsWorkNode();
+                AdultData[] tuples = b.dropBuffer(); // get tuples and drop bucket
+                System.out.println("Releasing bucket! " + tuples[0].QuasiToString(QID));
+                for (AdultData t : tuples) { // output tuples
+                    out.collect(t);
                 }
             }
+            //}
         }
     }
 }
