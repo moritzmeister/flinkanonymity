@@ -7,15 +7,15 @@ public class Bucket {
 
     private int bufferSize;
     private boolean workNode = false;
-    private LinkedList<CensusData> buffer;
+    private LinkedList<AdultData> buffer;
 
     public Bucket(){
         this.bufferSize = 0;
         this.buffer = new LinkedList<>();
     }
 
-    public void add(CensusData cd) {
-        buffer.add(cd);
+    public void add(AdultData ad) {
+        buffer.add(ad);
         bufferSize++;
     }
 
@@ -23,16 +23,16 @@ public class Bucket {
         return (bufferSize >= k);
     }
 
-    public void setWorkNode() {
+    public void markAsWorkNode() {
         this.workNode = true;
     }
 
     public boolean isWorkNode() {
         return workNode;
     }
-    public CensusData[] dropBuffer(){
+    public AdultData[] dropBuffer(){
         // Returns everything in the buffer and clears it.
-        CensusData[] out = {};
+        AdultData[] out = {};
         out = buffer.toArray(out);
         buffer.clear();
         return out;

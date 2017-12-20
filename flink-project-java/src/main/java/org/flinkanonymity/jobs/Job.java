@@ -1,10 +1,12 @@
 package org.flinkanonymity.jobs;
 
+import org.apache.flink.api.java.operators.translation.PlanFilterOperator;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSink;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.api.functions.co.RichCoFlatMapFunction;
 import org.apache.flink.util.Collector;
 import org.apache.flink.api.common.functions.FlatMapFunction;
 
@@ -23,11 +25,11 @@ public class Job {
 
         String dataFilePath = "../sample-data/ipums_usa/usa_00001_sample.csv";
 
-        // Set up Hashmap
-        HashMap<AdultData, Bucket> hashMap = new HashMap<>();
+        // Set up Hashmap - has to be final in order to be used in HashMapFunction later on.
+        final HashMap<AdultData, Bucket> hashMap = new HashMap<>();
 
-        // Setup variables
-        int k = 4;
+        // Define k in k-anonymity
+        final int k = 4;
 
         // Setting up Environment
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
@@ -41,7 +43,7 @@ public class Job {
 
 
         // Generalize Quasi Identifiers
-        DataStream<AdultData> genData = data.map(asdasda);
+        DataStream<AdultData> genData = data; //.map(asdasda);
 
         DataStream<AdultData> output = genData.flatMap(new FlatMapFunction<AdultData, AdultData>() {
             @Override
@@ -50,7 +52,7 @@ public class Job {
                 Bucket b = hashMap.get(tuple);
                 if (b.isWorkNode()) {
                     // output tuple
-                    out.collect(b)
+                    out.collect(tuple);
                 } else {
                     b.add(tuple);
                     if (b.isKAnonymous(k)) { // if bucket satisfies k-anonymity
@@ -69,18 +71,10 @@ public class Job {
             }
         });
 
-        /*
-        // If bucket is worknode
-
-        */
 
 
-
-
-
-        data.print();
+        output.print();
 
         env.execute();
     }
 }
-
