@@ -10,7 +10,7 @@ public class Generalization {
     public String attr;
     public String dataFilePath;
     public int level;
-    public HashMap<String, String> hierarchy = new HashMap<String, String>();
+    private HashMap<String, String> hierarchy = new HashMap<String, String>();
 
     public Generalization(){
         throw new RuntimeException("Attribute needs to be specified for generalization");
@@ -43,7 +43,12 @@ public class Generalization {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+    }
+    public String getHierarchy(String key){
+        return this.hierarchy.get(key);
+    }
+    public void putHierarchy(String key, String val){
+        this.hierarchy.put(key, val);
     }
 
 }
