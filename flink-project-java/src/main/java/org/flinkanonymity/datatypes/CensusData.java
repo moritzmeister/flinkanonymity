@@ -25,6 +25,25 @@ package org.flinkanonymity.datatypes;
 
 public class CensusData{
 
+    public int year;
+    public int datanum;
+    public int serial;
+    public int hhwt;
+    public int gq;
+    public int pernum;
+    public int perwt;
+    public int sex;
+    public int age;
+    public int marst;
+    public int race;
+    public int raced;
+    public int bpl;
+    public int bpld;
+    public int educ;
+    public int educd;
+    public int occ;
+    public int incwage;
+
     public CensusData(){
         this.year = -1;
         this.serial = -1;
@@ -98,26 +117,6 @@ public class CensusData{
         this.incwage = Integer.parseInt(args[17]);
     }
 
-    public int year;
-    public int datanum;
-    public int serial;
-    public int hhwt;
-    public int gq;
-    public int pernum;
-    public int perwt;
-    public int sex;
-    public int age;
-    public int marst;
-    public int race;
-    public int raced;
-    public int bpl;
-    public int bpld;
-    public int educ;
-    public int educd;
-    public int occ;
-    public int incwage;
-
-
     public String toString() {
         /* Returns the object attributes as a comma separated string */
         StringBuilder sb = new StringBuilder();
@@ -143,15 +142,4 @@ public class CensusData{
         return sb.toString();
     }
 
-    @Override
-    public int hashCode() {
-        // Do something here
-        return super.hashCode();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        // Do something here
-        return super.equals(obj);
-    }
 }
