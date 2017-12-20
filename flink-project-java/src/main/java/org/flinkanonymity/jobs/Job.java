@@ -20,6 +20,12 @@ public class Job {
         // Set up Hashmap
         HashMap<CensusData, Bucket> hashMap = new HashMap<>();
 
+        // Setup variables
+        CensusData tuple;
+        Bucket b;
+        CensusData[] tuples;
+        int k = 4;
+
         // Setting up Environment
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
@@ -34,13 +40,29 @@ public class Job {
         // Generalize Quasi Identifiers
 
         // Get bucket through hashmap
+        b = hashMap(tuple);
 
         // If bucket is worknode
+        if (b.isWorkNode()) {
             // output tuple
-        // else bucket.add()
-            // if bucket satisfies k-anonymity
+            b = b;
+        } else {
+            // else bucket.add()
+            b.add(tuple);
+            if (b.isKAnonymous(k)){ // if bucket satisfies k-anonymity
                 // set bucket as worknode
+                b.markAsWorkNode();
+
                 // get tuples and drop bucket
+                tuples = b.dropBuffer();
+
+                // output tuples
+            }
+        }
+
+
+
+
 
         data.print();
 
