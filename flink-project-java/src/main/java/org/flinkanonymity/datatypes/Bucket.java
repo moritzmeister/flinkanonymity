@@ -5,9 +5,9 @@ import java.util.LinkedList;
 
 public class Bucket {
 
-    private int bufferSize;
-    private boolean workNode = false;
-    private LinkedList<AdultData> buffer;
+    int bufferSize;
+    boolean workNode = false;
+    LinkedList<AdultData> buffer;
 
     public Bucket(){
         this.bufferSize = 0;
