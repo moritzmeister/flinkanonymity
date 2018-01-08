@@ -101,7 +101,7 @@ public class Job {
             if (lb.isKAnonymous(k)) { // if bucket satisfies k-anonymity
                 if (lb.isLDiverse(l)){
                     AdultData[] tuples = lb.dropBuffer(); // get tuples and drop bucket
-                    System.out.println("Releasing bucket! " + tuples[0].QuasiToString(QID) + "K: "+k + " L: "+l);
+                    System.out.println("Releasing bucket! " + tuples[0].QuasiToString(QID));
                     for (AdultData t : tuples) { // output tuples
                         out.collect(t);
                     }
