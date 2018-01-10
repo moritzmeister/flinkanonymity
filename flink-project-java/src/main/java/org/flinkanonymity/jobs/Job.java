@@ -92,12 +92,7 @@ public class Job {
                 hashMap.put(TupleQuasiString, new Bucket()); // Create a bucket
             }
             Bucket b = hashMap.get(TupleQuasiString); // Get the bucket
-            /*
-            if (b.isWorkNode()) { // If bucket is worknode
-                out.collect(tuple); // output tuple
 
-            } else {
-            */
             b.add(tuple);
             if (b.isKAnonymous(k)) { // if bucket satisfies k-anonymity
                 // b.markAsWorkNode();
