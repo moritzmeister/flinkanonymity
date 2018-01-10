@@ -1,31 +1,31 @@
+/*
+        DataStream<AdultData> genData = data
+                .map(new Generalize())
+                .keyBy(new KeySelector<AdultData, String>() {
+                           public String getKey(AdultData tuple) {
+                               String TupleQuasiString = tuple.QuasiToString(QID);
+                               return TupleQuasiString;
+                           }
+                       });
+*/
+/*
+        KeyedStream<AdultData, String> keyedGenData = genData.keyBy(new KeySelector<AdultData, String>() {
+            public String getKey(AdultData tuple) {
+                String TupleQuasiString = tuple.QuasiToString(QID);
+                return TupleQuasiString;
+            }
+        });
+*/
 
-    val env = StreamExecutionEnvironment.getExecutionEnvironment
-
-    env.setStreamTimeCharacteristic(TimeCharacteristic.IngestionTime)
-
-    val input: DataStream[String] = env.readTextFile("/Users/moritzmeister/Documents/FlinkProjects/flinkanonymity/sample-data/ipums_usa/usa_00001_sample.csv")
-
-    val split_input = input.flatMap { _.split(",") }
-
-    input.print()
-    split_input.print()
-    val env = StreamExecutionEnvironment.getExecutionEnvironment
-
-    env.setStreamTimeCharacteristic(TimeCharacteristic.IngestionTime)
-
-    val input: DataStream[String] = env.readTextFile("/Users/moritzmeister/Documents/FlinkProjects/flinkanonymity/sample-data/ipums_usa/usa_00001_sample.csv")
-
-    val split_input = input.flatMap { _.split(",") }
-
-    input.print()
-    split_input.print()
-    val env = StreamExecutionEnvironment.getExecutionEnvironment
-
-    env.setStreamTimeCharacteristic(TimeCharacteristic.IngestionTime)
-
-    val input: DataStream[String] = env.readTextFile("/Users/moritzmeister/Documents/FlinkProjects/flinkanonymity/sample-data/ipums_usa/usa_00001_sample.csv")
-
-    val split_input = input.flatMap { _.split(",") }
-
-    input.print()
-    split_input.print()
+import org.apache.flink.api.java.operators.translation.PlanFilterOperator;
+import org.apache.flink.api.java.utils.ParameterTool;
+import org.apache.flink.streaming.api.TimeCharacteristic;
+import org.apache.flink.streaming.api.datastream.DataStream;
+import org.apache.flink.streaming.api.datastream.KeyedStream;
+import org.apache.flink.streaming.api.datastream.DataStreamSink;
+import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.api.functions.co.RichCoFlatMapFunction;
+import org.apache.flink.util.Collector;
+import org.apache.flink.api.common.functions.FlatMapFunction;
+import org.apache.flink.api.common.functions.MapFunction;
+import org.apache.flink.api.java.functions.KeySelector;
