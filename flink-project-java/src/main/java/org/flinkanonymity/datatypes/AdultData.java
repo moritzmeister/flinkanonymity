@@ -24,6 +24,8 @@ public class AdultData {
     public String workclass;
     public String occ;
     public String salary;
+    public String sensitive;
+    public String sensitive_class;
 
 
     public AdultData(){
@@ -36,10 +38,12 @@ public class AdultData {
         this.workclass = "";
         this.occ = "";
         this.salary = "";
+        this.sensitive = "";
+        this.sensitive_class = "";
     }
 
     public AdultData(String sex, String age, String race, String marst, String educ, String country, String workclass,
-                      String occ, String salary) {
+                      String occ, String salary, String sensitive, String sensitive_class) {
         /* Constructs a AdultData Object from 9 String inputs.*/
         this.sex = sex;
         this.age = age;
@@ -50,15 +54,20 @@ public class AdultData {
         this.workclass = workclass;
         this.occ = occ;
         this.salary = salary;
-
+        this.sensitive = sensitive;
+        this.sensitive_class = sensitive_class;
     }
 
     public AdultData(String line){
         /* Constructs a CensusData Object from a comma separated string input. */
         String[] args = line.split(";");
-
-        if (args.length != 9) {
-            throw new RuntimeException("Number of arguments does not equal 9: " + line);
+        if (args.length == 9){
+            // Temporary test while not having the sensitive data.
+            this.sensitive = "Mock";
+            this.sensitive_class = Integer.toString((int)(Math.random()*10)); // Creating mock classes
+        }
+        else if (args.length != 11) {
+            throw new RuntimeException("Number of arguments does not equal 11: " + line);
         }
 
         this.sex = args[0];
@@ -70,6 +79,8 @@ public class AdultData {
         this.workclass = args[6];
         this.occ = args[7];
         this.salary = args[8];
+        //this.sensitive = args[9];
+        //this.sensitive_class = args[10];
     }
 
     public void setAttribute(String attribute, String value) {
@@ -101,6 +112,12 @@ public class AdultData {
                 break;
             case "salary":
                 this.salary = value;
+                break;
+            case "sensitive":
+                this.sensitive = value;
+                break;
+            case "sensitive_class":
+                this.sensitive_class = value;
                 break;
             default:
                 throw new IllegalArgumentException("Invalid attribute: " + attribute);
@@ -139,6 +156,12 @@ public class AdultData {
             case "salary":
                 temp =  this.salary;
                 break;
+            case "sensitive":
+                temp = this.sensitive;
+                break;
+            case "sensitive_class":
+                temp = this.sensitive_class;
+                break;
             default:
                 throw new IllegalArgumentException("Invalid attribute: " + attribute);
         }
@@ -166,7 +189,9 @@ public class AdultData {
         sb.append(country).append(",");
         sb.append(workclass).append(",");
         sb.append(occ).append(",");
-        sb.append(salary);
+        sb.append(salary).append(",");
+        sb.append(sensitive).append(",");
+        sb.append(sensitive_class);
         return sb.toString();
     }
 
