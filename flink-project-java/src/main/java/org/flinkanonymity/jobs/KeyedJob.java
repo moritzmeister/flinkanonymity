@@ -4,23 +4,25 @@ import org.apache.flink.api.java.operators.translation.PlanFilterOperator;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
+import org.apache.flink.streaming.api.datastream.KeyedStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSink;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.co.RichCoFlatMapFunction;
 import org.apache.flink.util.Collector;
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.common.functions.MapFunction;
+import org.apache.flink.api.java.functions.KeySelector;
 
 import org.flinkanonymity.datatypes.*;
 import org.flinkanonymity.sources.AdultDataSource;
 
 import java.util.HashMap;
 
-public class Job {
+public class KeyedJob {
     // Set up QID and Hashmap for global use.
     static QuasiIdentifier QID;
     static HashMap<String, Bucket> hashMap;
-    static int k = 5;
+    static int k = 20;
     static int l = 5;
 
     public static void main(String[] args) throws Exception {
@@ -58,7 +60,7 @@ public class Job {
 
         // Setting up Environment
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        env.setParallelism(1);
+        env.setParallelism(2);
         env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
 
         DataStream<AdultData> data = env.addSource(new AdultDataSource(dataFilePath));
@@ -69,8 +71,24 @@ public class Job {
         // Generalize Quasi Identifiers
         DataStream<AdultData> genData = data.map(new Generalize());
 
-        //DataStream<AdultData> output = genData.flatMap(new KAnonymize());
-        DataStream<AdultData> output = genData.flatMap(new LDiversify());
+/*
+        KeyedStream<AdultData, String> keyedGenData = genData.keyBy(new KeySelector<AdultData, String>() {
+            public String getKey(AdultData tuple) {
+                String TupleQuasiString = tuple.QuasiToString(QID);
+                return TupleQuasiString;
+            }
+        });
+*/
+
+        DataStream<AdultData> output = genData
+                .keyBy(new KeySelector<AdultData, String>() {
+                    public String getKey(AdultData tuple) {
+                        String TupleQuasiString = tuple.QuasiToString(QID);
+                        return TupleQuasiString;
+                    }
+                })
+                .flatMap(new KAnonymize());
+        //DataStream<AdultData> output = genData.flatMap(new LDiversify());
 
         output.print();
 
