@@ -28,7 +28,7 @@ public class Job {
         // final String filePath = params.getRequired("input");
 
         // Set file paths
-        String dataFilePath = "../sample-data/arx_adult/adult_subset.csv";
+        String dataFilePath = "../sample-data/arx_adult/adult_subset_sensitive.csv";
         String sex_hierarchy = "../sample-data/arx_adult/adult_hierarchy_sex.csv";
         String age_hierarchy = "../sample-data/arx_adult/adult_hierarchy_age.csv";
         String race_hierarchy = "../sample-data/arx_adult/adult_hierarchy_race.csv";
@@ -97,8 +97,11 @@ public class Job {
 
             if (lb.isKAnonymous(k)) { // if bucket satisfies k-anonymity
                 if (lb.isLDiverse(l)){
+                    // System.out.println(lb);
+                    int size = lb.size();
+                    int numBuckets = lb.numberOfBuckets();
                     AdultData[] tuples = lb.dropBuffer(); // get tuples and drop bucket
-                    System.out.println("Releasing bucket! " + tuples[0].QuasiToString(QID));
+                    System.out.println("Releasing bucket! " + tuples[0].QuasiToString(QID) + ". " + size + " tuples in " + numBuckets + " buckets. ");
                     for (AdultData t : tuples) { // output tuples
                         out.collect(t);
                     }

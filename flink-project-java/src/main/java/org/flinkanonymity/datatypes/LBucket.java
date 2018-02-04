@@ -26,16 +26,49 @@ public class LBucket extends Bucket{
     public void add(AdultData ad) {
         String sensitiveData = ad.getAttribute(this.sensitive);
         if (!buckets.containsKey(sensitiveData)){ // If a bucket for this sensitive data does not exists
-            buckets.put(sensitiveData, new Bucket()); // Create this bucket
+            Bucket tempBucket = new Bucket(id = sensitiveData); // Create bucket
+            tempBucket.add(ad); // Add the data
+            buckets.put(sensitiveData, tempBucket); // Create this bucket. Id is just for debugging.
+        } else {
+            buckets.get(sensitiveData).add(ad); // Get the proper bucket for the sensitive data, // Add the data
         }
-        Bucket b = buckets.get(sensitiveData); // Get the proper bucket for the sensitive data.
-        b.add(ad); // Add the data
+
+
+        if (buckets.get(sensitiveData).size() == 0){
+            throw new RuntimeException("Created empty bucket with sensitiveData " + sensitiveData);
+        }
+
         this.bufferSize++;
+    }
+
+    public String toString(){
+        int empty = 0;
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n!!Start! Bucket containing : " + this.buckets.size()+" buckets, in total " + this.bufferSize + " tuples. \n");
+        for(Map.Entry<String, Bucket> entry : buckets.entrySet()) { // For each bucket
+            Bucket b = entry.getValue();
+            if (b.size() == 0){
+                empty++;
+            }
+            sb.append(b);
+        }
+        sb.append("\n"+empty+" are empty.");
+        return sb.toString();
     }
 
     public boolean isLDiverse(int l) {
         // Is the bucket l-diverse.
-        return (buckets.size() >= l); // Are there L or more buckets? i.e. are there L or more different sensitive values
+        return (this.buckets.size() >= l); // Are there L or more buckets? i.e. are there L or more different sensitive values
+
+    }
+
+    public int size(){
+        // Returning size (number of tuples)
+        return this.bufferSize;
+    }
+
+    public int numberOfBuckets(){
+        return this.buckets.size();
     }
 
 
@@ -52,6 +85,7 @@ public class LBucket extends Bucket{
                 i ++;
             }
         }
+        this.buckets = new HashMap<String, Bucket>(); // Creating LBuckets.
         this.bufferSize = 0;
         return out;
     }

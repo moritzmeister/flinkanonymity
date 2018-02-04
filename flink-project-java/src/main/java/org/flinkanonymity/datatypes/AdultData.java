@@ -61,6 +61,7 @@ public class AdultData {
     public AdultData(String line){
         /* Constructs a CensusData Object from a comma separated string input. */
         String[] args = line.split(";");
+
         if (args.length == 9){
             // Temporary test while not having the sensitive data.
             this.sensitive = "Mock";
@@ -69,6 +70,11 @@ public class AdultData {
         else if (args.length != 11) {
             throw new RuntimeException("Number of arguments does not equal 11: " + line);
         }
+        else{
+            this.sensitive = args[9];
+            this.sensitive_class = args[10];
+        }
+
 
         this.sex = args[0];
         this.age = args[1];
@@ -79,8 +85,10 @@ public class AdultData {
         this.workclass = args[6];
         this.occ = args[7];
         this.salary = args[8];
-        //this.sensitive = args[9];
-        //this.sensitive_class = args[10];
+
+        if (this.age == null){
+            throw new RuntimeException("Age is null! : " + line);
+        }
     }
 
     public void setAttribute(String attribute, String value) {
