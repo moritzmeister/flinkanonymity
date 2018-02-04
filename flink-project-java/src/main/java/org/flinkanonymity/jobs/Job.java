@@ -21,7 +21,7 @@ public class Job {
     // Set up QID and Hashmap for global use.
     static QuasiIdentifier QID;
     static HashMap<String, Bucket> hashMap;
-    static int k = 20;
+    static int k = 5;
     static int l = 5;
 
     public static void main(String[] args) throws Exception {
