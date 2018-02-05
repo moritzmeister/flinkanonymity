@@ -12,6 +12,9 @@ import org.apache.flink.util.Collector;
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.java.functions.KeySelector;
+import org.apache.flink.streaming.api.functions.windowing.WindowFunction;
+import org.apache.flink.streaming.api.windowing.windows.Window;
+import org.apache.flink.streaming.api.windowing.windows.GlobalWindow;
 
 import org.flinkanonymity.datatypes.*;
 import org.flinkanonymity.sources.AdultDataSource;
@@ -60,7 +63,7 @@ public class KeyedJob {
 
         // Setting up Environment
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        env.setParallelism(2);
+        //env.setParallelism(2);
         env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
 
         DataStream<AdultData> data = env.addSource(new AdultDataSource(dataFilePath));
@@ -79,7 +82,25 @@ public class KeyedJob {
             }
         });
 */
-
+/*
+        DataStream<Integer> output = genData
+                .keyBy(new KeySelector<AdultData, String>() {
+                    public String getKey(AdultData tuple) {
+                        String TupleQuasiString = tuple.QuasiToString(QID);
+                        return TupleQuasiString;
+                    }
+                })
+                .countWindow(k)
+                .apply(new WindowFunction<AdultData, Integer, String, GlobalWindow>() {
+                    public void apply (String key, GlobalWindow window, Iterable<AdultData> values, Collector<Integer> out) throws Exception {
+                        int count = 0;
+                        for (AdultData t: values) {
+                            count += 1;
+                        }
+                        out.collect (new Integer(count));
+                    }
+                });
+*/
         DataStream<AdultData> output = genData
                 .keyBy(new KeySelector<AdultData, String>() {
                     public String getKey(AdultData tuple) {
@@ -87,7 +108,19 @@ public class KeyedJob {
                         return TupleQuasiString;
                     }
                 })
-                .flatMap(new KAnonymize());
+                .countWindow(k)
+                .apply(new WindowFunction<AdultData, AdultData, String, GlobalWindow>() {
+                    public void apply (String key, GlobalWindow window, Iterable<AdultData> values, Collector<AdultData> out) throws Exception {
+                        int count = 0;
+                        System.out.println("Releasing bucket! " + key);
+                        for (AdultData t: values) {
+                            count += 1;
+                            out.collect (t);
+                        }
+                        System.out.println("Number of records: " + count);
+                    }
+                });
+                //.flatMap(new KAnonymize());
         //DataStream<AdultData> output = genData.flatMap(new LDiversify());
 
         output.print();
@@ -95,6 +128,7 @@ public class KeyedJob {
         //genData.print();
         env.execute();
     }
+
     public static class Generalize implements MapFunction<AdultData, AdultData>{
         @Override
         public AdultData map(AdultData adult) throws Exception{
