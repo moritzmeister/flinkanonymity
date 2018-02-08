@@ -15,6 +15,10 @@ import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.streaming.api.functions.windowing.WindowFunction;
 import org.apache.flink.streaming.api.windowing.windows.Window;
 import org.apache.flink.streaming.api.windowing.windows.GlobalWindow;
+import org.apache.flink.util.OutputTag;
+import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
+//import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction.Context;
+import org.apache.flink.api.java.tuple.Tuple2;
 
 import org.flinkanonymity.datatypes.*;
 import org.flinkanonymity.sources.AdultDataSource;
@@ -64,7 +68,7 @@ public class KeyedJob {
         // Setting up Environment
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         //env.setParallelism(2);
-        env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
+        env.setStreamTimeCharacteristic(TimeCharacteristic.IngestionTime);
 
         DataStream<AdultData> data = env.addSource(new AdultDataSource(dataFilePath));
 
@@ -101,32 +105,55 @@ public class KeyedJob {
                     }
                 });
 */
-        DataStream<AdultData> output = genData
-                .keyBy(new KeySelector<AdultData, String>() {
-                    public String getKey(AdultData tuple) {
-                        String TupleQuasiString = tuple.QuasiToString(QID);
-                        return TupleQuasiString;
-                    }
-                })
+        DataStream<Tuple2<Long, AdultData>> output = genData
+                .keyBy(new QidKey())
                 .countWindow(k)
-                .apply(new WindowFunction<AdultData, AdultData, String, GlobalWindow>() {
-                    public void apply (String key, GlobalWindow window, Iterable<AdultData> values, Collector<AdultData> out) throws Exception {
-                        int count = 0;
-                        System.out.println("Releasing bucket! " + key);
-                        for (AdultData t: values) {
-                            count += 1;
-                            out.collect (t);
-                        }
-                        System.out.println("Number of records: " + count);
-                    }
-                });
-                //.flatMap(new KAnonymize());
-        //DataStream<AdultData> output = genData.flatMap(new LDiversify());
+                .process(new KAnonymize2());
+                //.apply(new KAnonymize());
 
         output.print();
 
         //genData.print();
         env.execute();
+    }
+
+
+    public static class KAnonymize2 extends ProcessWindowFunction<AdultData, Tuple2<Long, AdultData>, String, GlobalWindow> {
+        @Override
+        public void process(String key, Context context, Iterable<AdultData> elements, Collector<Tuple2<Long, AdultData>> out) throws Exception {
+            int count = 0;
+            System.out.println("Releasing bucket! " + key);
+            for (AdultData t: elements) {
+                count += 1;
+                out.collect (new Tuple2<Long, AdultData>(t.getCreationTime(), t));
+            }
+            //tag += 1;
+            System.out.println("Number of records: " + count);
+            System.out.println("CurrentProcessingTime: " + context.currentProcessingTime());
+            System.out.println("CurrentWindow: " + context.window());
+        }
+    }
+
+    public static class KAnonymize implements WindowFunction<AdultData, AdultData, String, GlobalWindow> {
+        @Override
+        public void apply (String key, GlobalWindow window, Iterable<AdultData> values, Collector<AdultData> out) throws Exception {
+            int count = 0;
+            System.out.println("Releasing bucket! " + key);
+            for (AdultData t: values) {
+                count += 1;
+                out.collect (t);
+            }
+            //tag += 1;
+            System.out.println("Number of records: " + count);
+        }
+    }
+
+    public static class QidKey implements KeySelector<AdultData, String> {
+        @Override
+        public String getKey(AdultData tuple) {
+            String TupleQuasiString = tuple.QuasiToString(QID);
+            return TupleQuasiString;
+        }
     }
 
     public static class Generalize implements MapFunction<AdultData, AdultData>{
@@ -158,36 +185,4 @@ public class KeyedJob {
             }
         }
     }
-
-
-    public static class KAnonymize implements FlatMapFunction<AdultData, AdultData>{
-        // K-anonymity
-        @Override
-        public void flatMap(AdultData tuple, Collector<AdultData> out) throws Exception {
-            // get bucket
-            String TupleQuasiString = tuple.QuasiToString(QID);
-            if (!hashMap.containsKey(TupleQuasiString)) { // If this bucket has never been reached before
-                hashMap.put(TupleQuasiString, new Bucket()); // Create a bucket
-            }
-            Bucket b = hashMap.get(TupleQuasiString); // Get the bucket
-
-            b.add(tuple);
-            if (b.isKAnonymous(k)) { // if bucket satisfies k-anonymity
-                // b.markAsWorkNode();
-                AdultData[] tuples = b.dropBuffer(); // get tuples and drop bucket
-                System.out.println("Releasing bucket! " + tuples[0].QuasiToString(QID));
-                for (AdultData t : tuples) { // output tuples
-                    out.collect(t);
-                }
-            }
-            //}
-        }
-    }
-
-        /*
-    if (b.isWorkNode()) { // If bucket is worknode
-        out.collect(tuple); // output tuple
-
-    } else {
-    */
 }
