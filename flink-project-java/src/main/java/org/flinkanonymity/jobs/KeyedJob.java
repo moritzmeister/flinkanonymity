@@ -105,7 +105,7 @@ public class KeyedJob {
                     }
                 });
 */
-        DataStream<Tuple2<Long, AdultData>> output = genData
+        DataStream<AdultData> output = genData
                 .keyBy(new QidKey())
                 .countWindow(k)
                 .process(new KAnonymize2());
@@ -118,14 +118,14 @@ public class KeyedJob {
     }
 
 
-    public static class KAnonymize2 extends ProcessWindowFunction<AdultData, Tuple2<Long, AdultData>, String, GlobalWindow> {
+    public static class KAnonymize2 extends ProcessWindowFunction<AdultData, AdultData, String, GlobalWindow> {
         @Override
-        public void process(String key, Context context, Iterable<AdultData> elements, Collector<Tuple2<Long, AdultData>> out) throws Exception {
+        public void process(String key, Context context, Iterable<AdultData> elements, Collector<AdultData> out) throws Exception {
             int count = 0;
             System.out.println("Releasing bucket! " + key);
             for (AdultData t: elements) {
                 count += 1;
-                out.collect (new Tuple2<Long, AdultData>(t.getCreationTime(), t));
+                out.collect (t);
             }
             //tag += 1;
             System.out.println("Number of records: " + count);
