@@ -1,17 +1,26 @@
 package org.flinkanonymity.jobs;
 
-import org.apache.flink.api.java.operators.translation.PlanFilterOperator;
 import org.apache.flink.api.java.utils.ParameterTool;
+import org.apache.flink.shaded.com.google.common.collect.Iterables;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
-import org.apache.flink.streaming.api.datastream.KeyedStream;
-import org.apache.flink.streaming.api.datastream.DataStreamSink;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.functions.co.RichCoFlatMapFunction;
+import org.apache.flink.streaming.api.windowing.assigners.GlobalWindows;
+import org.apache.flink.streaming.api.windowing.triggers.PurgingTrigger;
+import org.apache.flink.streaming.api.windowing.triggers.Trigger;
+import org.apache.flink.streaming.api.windowing.triggers.TriggerResult;
+import org.apache.flink.api.common.functions.ReduceFunction;
+import org.apache.flink.api.common.state.ReducingState;
+import org.apache.flink.api.common.state.ReducingStateDescriptor;
 import org.apache.flink.util.Collector;
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.common.functions.MapFunction;
+import org.apache.flink.api.common.state.MapState;
+import org.apache.flink.api.common.state.MapStateDescriptor;
 import org.apache.flink.api.java.functions.KeySelector;
+import org.apache.flink.api.common.typeutils.base.LongSerializer;
+import org.apache.flink.api.common.typeutils.base.IntSerializer;
+import org.apache.flink.api.common.typeutils.base.StringSerializer;
 import org.apache.flink.streaming.api.functions.windowing.WindowFunction;
 import org.apache.flink.streaming.api.windowing.windows.Window;
 import org.apache.flink.streaming.api.windowing.windows.GlobalWindow;
@@ -29,8 +38,8 @@ public class KeyedJob {
     // Set up QID and Hashmap for global use.
     static QuasiIdentifier QID;
     static HashMap<String, Bucket> hashMap;
-    static int k = 20;
-    static int l = 5;
+    static int k = 4;
+    static int l = 4;
 
     public static void main(String[] args) throws Exception {
         ParameterTool params = ParameterTool.fromArgs(args);
@@ -107,8 +116,10 @@ public class KeyedJob {
 */
         DataStream<AdultData> output = genData
                 .keyBy(new QidKey())
-                .countWindow(k)
-                .process(new KAnonymize2());
+                //.countWindow(k)
+                .window(GlobalWindows.create())
+                .trigger(PurgingTrigger.of(lDiversityTrigger.of(k, 4)))
+                .process(new Release());
                 //.apply(new KAnonymize());
 
         output.print();
@@ -118,6 +129,90 @@ public class KeyedJob {
     }
 
 
+    public static class lDiversityTrigger<W extends Window> extends Trigger<Object, W> {
+
+        private final int l, k;
+        private String sensitive = "sensitive_class";
+
+
+        private final MapStateDescriptor<String, Integer> stateMap =
+                new MapStateDescriptor<>("map", StringSerializer.INSTANCE, IntSerializer.INSTANCE);
+
+
+        private lDiversityTrigger(int k, int l) {
+            // Constructor
+            this.k = k;
+            this.l = l;
+        }
+
+        public static <W extends Window> lDiversityTrigger<W> of(int k, int l) {
+            return new lDiversityTrigger<>(k, l);
+        }
+
+        // All methods below are copied from CountTrigger
+        @Override
+        public TriggerResult onElement(Object element, long timestamp, W window, TriggerContext ctx) throws Exception {
+            // Object element is the tuple
+            AdultData ad = (AdultData)element;
+            // Get sensitive data which will serve as key
+            String sensitiveData = ad.getAttribute(this.sensitive);
+            // Get the MapState, which is a map with keys and counters.
+            MapState<String, Integer> diversityMap = ctx.getPartitionedState(stateMap);
+
+            // Adding the tuple to the map
+            if (diversityMap.contains(sensitiveData)) {// If sensdata in map
+                //get count
+                int count = diversityMap.get(sensitiveData);
+                count++;
+                diversityMap.put(sensitiveData, count);
+            } else {
+                //put count = 1
+                diversityMap.put(sensitiveData, 1);
+            }
+
+            // We actually never use the counters, because checking the number of entries is easier..
+            if (Iterables.size(diversityMap.entries()) >= this.k){
+                // If number of tuples > k (If k-anonymous)
+                if(Iterables.size(diversityMap.keys()) >= this.l){
+                    // If number of keys > l (If l-diverse)
+                    diversityMap.clear();
+                    return TriggerResult.FIRE;
+                }
+            }
+            return TriggerResult.CONTINUE;
+        }
+
+        @Override
+        public TriggerResult onEventTime(long time, W window, TriggerContext ctx) {
+            return TriggerResult.CONTINUE;
+        }
+
+        @Override
+        public TriggerResult onProcessingTime(long time, W window, TriggerContext ctx) throws Exception {
+            return TriggerResult.CONTINUE;
+        }
+
+        @Override
+        public void clear(W window, TriggerContext ctx) throws Exception {
+            ctx.getPartitionedState(stateMap).clear();
+        }
+
+    }
+
+    public static class Release extends ProcessWindowFunction<AdultData, AdultData, String, GlobalWindow> {
+        @Override
+        public void process(String key, Context context, Iterable<AdultData> elements, Collector<AdultData> out) throws Exception {
+            System.out.println("Releasing bucket! " + key);
+            for (AdultData t: elements) {
+                out.collect (t);
+            }
+            System.out.println("Number of records: " + Iterables.size(elements));
+            System.out.println("CurrentProcessingTime: " + context.currentProcessingTime());
+            System.out.println("CurrentWindow: " + context.window());
+        }
+    }
+
+    /*
     public static class KAnonymize2 extends ProcessWindowFunction<AdultData, AdultData, String, GlobalWindow> {
         @Override
         public void process(String key, Context context, Iterable<AdultData> elements, Collector<AdultData> out) throws Exception {
@@ -133,7 +228,10 @@ public class KeyedJob {
             System.out.println("CurrentWindow: " + context.window());
         }
     }
+    */
 
+
+/*
     public static class KAnonymize implements WindowFunction<AdultData, AdultData, String, GlobalWindow> {
         @Override
         public void apply (String key, GlobalWindow window, Iterable<AdultData> values, Collector<AdultData> out) throws Exception {
@@ -147,7 +245,7 @@ public class KeyedJob {
             System.out.println("Number of records: " + count);
         }
     }
-
+*/
     public static class QidKey implements KeySelector<AdultData, String> {
         @Override
         public String getKey(AdultData tuple) {
