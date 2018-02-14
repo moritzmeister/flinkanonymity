@@ -28,6 +28,7 @@ import org.apache.flink.util.OutputTag;
 import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 //import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction.Context;
 import org.apache.flink.api.java.tuple.Tuple2;
+import org.apache.flink.streaming.api.functions.ProcessFunction;
 
 import org.flinkanonymity.datatypes.*;
 import org.flinkanonymity.sources.AdultDataSource;
@@ -87,6 +88,12 @@ public class KeyedJob {
         // Generalize Quasi Identifiers
         DataStream<AdultData> genData = data.map(new Generalize());
 
+        DataStream<Tuple2<AdultData, Long>> tsGenData = genData
+                .keyBy(new QidKey())
+                .process(new ProcessTimestamp());
+
+        tsGenData.print();
+
 /*
         KeyedStream<AdultData, String> keyedGenData = genData.keyBy(new KeySelector<AdultData, String>() {
             public String getKey(AdultData tuple) {
@@ -114,6 +121,7 @@ public class KeyedJob {
                     }
                 });
 */
+
         DataStream<AdultData> output = genData
                 .keyBy(new QidKey())
                 //.countWindow(k)
@@ -126,6 +134,14 @@ public class KeyedJob {
 
         //genData.print();
         env.execute();
+    }
+
+    public static class ProcessTimestamp extends ProcessFunction<AdultData, Tuple2<AdultData,Long>> {
+        // Transfrom a DataStream of AdultData elements into a stream of AdultData elements with ingestion timestamp
+        @Override
+        public void processElement(AdultData value, Context ctx, Collector<Tuple2<AdultData,Long>> out) throws Exception {
+            out.collect(new Tuple2<AdultData, Long>(value, ctx.timestamp()));
+        }
     }
 
 
