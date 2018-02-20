@@ -1,0 +1,134 @@
+\input{commandsFile}
+
+\renewcommand\thesubsection{\Alph{subsection}}
+
+\begin{document}
+
+%TITLE PAGE
+
+\begin{titlepage}
+
+
+%LOGO
+
+{\begin{table}[t!]
+\centering
+\begin{tabu} to \textwidth { X[1.3,r,p] X[1.7,l,p] }
+\textcolor{Blue}
+{\textbf{\small{L-Diversity in Streamed Big Data Philip Claesson, Moritz Meister}}} & \includegraphics[scale=0.5]{Images/PolimiLogo}
+\end{tabu}
+\end{table}}~\\ [7cm]
+
+%TITLE 
+
+\begin{flushleft}
+
+%Replace the text string with your title
+{\textcolor{Blue}{\textbf{\Huge{L-Diversity in Streamed Big Data}}}} \\ [1cm]
+
+\end{flushleft}
+
+\end{titlepage}
+
+%Define deliverable specific info
+%Replace cell contents where needed
+\begin{table}[h!]
+\begin{tabu} to \textwidth { X[0.3,r,p] X[0.7,l,p] }
+\hline
+
+\textbf{Deliverable:} & L-Diversity in Streamed Big Data\\
+\textbf{Title:} L-Diversity in Streamed Big Data \\
+\textbf{Authors:} & Philip Claesson, Moritz Meister \\
+\textbf{Version:} & 1.0 \\ 
+\textbf{Date:} & 10-February-2018 \\
+\textbf{Download page:} & https://github.com/moritzmeister/FlinkAnonymity \\
+\textbf{Copyright:} & Copyright © 2017, Philip Claesson, Moritz Meister – All rights reserved \\
+\hline
+\end{tabu}
+\end{table}
+
+
+
+
+\setcounter{page}{2}
+
+
+%------------------------------------------------------------------------------------------------------------------------------------------------
+\newpage
+\addcontentsline{toc}{section}{Table of Contents}
+\tableofcontents
+\newpage
+
+\addcontentsline{toc}{section}{List of Figures}
+\listoffigures
+\addcontentsline{toc}{section}{List of Tables}
+\listoftables
+
+%------------------------------------------------------------------------------------------------------------------------------------------------
+\clearpage
+{\color{Blue}{\section{Introduction}}}
+\label{sect:introduction}
+\input{Files/introduction}
+
+%------------------------------------------------------------------------------------------------------------------------------------------------
+\clearpage
+{\color{Blue}{\section{Background}}}
+\label{sect:background}
+\input{Files/background}
+%------------------------------------------------------------------------------------------------------------------------------------------------
+\clearpage
+{\color{Blue}{\section{Approach & Algorithm}}}
+\label{sect:algorithm}
+\input{Files/algorithm}
+
+
+%------------------------------------------------------------------------------------------------------------------------------------------------
+\clearpage
+{\color{Blue}{\section{Evaluation}}}
+\label{sect:evaluation}
+\input{Files/evaluation}
+%-----------------------------------------------------------------------------------------------------------------------------------------------
+
+\clearpage
+{\color{Blue}{\section{Discussion}}}
+\label{sect:discussion}
+\input{Files/discussion}
+%------------------------------------------------------------------------------------------------------------------------------------------------
+
+\clearpage
+{\color{Blue}{\section{Conclusion}}}
+\label{sect:conclusion}
+\input{Files/conclusion}
+
+
+%------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+%------------------------------------------------------------------------------------------------------------------------------------------------
+%\clearpage
+%\addcontentsline{toc}{section}{References}
+%\bibliographystyle{plain}
+%\bibliography{main}
+%------------------------------------------------------------------------------------------------------------------------------------------------
+\newpage
+
+
+%\begin{thebibliography}{9}
+
+%\bibitem{first_reference}
+%  Meister, Moritz,
+%  \textit{Lorem Ipsum: E dolo.},
+%  The Polimi Press,
+%  2018.
+  
+  
+
+%\end{thebibliography}
+
+\newpage
+\bibliographystyle{apacite}
+\bibliography{mybib}
+
+\end{document}
+
+
