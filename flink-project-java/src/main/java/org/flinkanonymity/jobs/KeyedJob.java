@@ -38,15 +38,16 @@ public class KeyedJob {
     // Set up QID and Hashmap for global use.
     static QuasiIdentifier QID;
     static HashMap<String, Bucket> hashMap;
-    static int k = 4;
-    static int l = 4;
+    static int k = 10;
+    static int l = 5;
+    static int p = 50;
 
     public static void main(String[] args) throws Exception {
         ParameterTool params = ParameterTool.fromArgs(args);
         // final String filePath = params.getRequired("input");
 
         // Set file paths
-        String dataFilePath = "../sample-data/arx_adult/adult_subset.csv";
+        String dataFilePath = "../sample-data/arx_adult/adult_sensitive.csv";
         String sex_hierarchy = "../sample-data/arx_adult/adult_hierarchy_sex.csv";
         String age_hierarchy = "../sample-data/arx_adult/adult_hierarchy_age.csv";
         String race_hierarchy = "../sample-data/arx_adult/adult_hierarchy_race.csv";
@@ -76,7 +77,7 @@ public class KeyedJob {
 
         // Setting up Environment
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        //env.setParallelism(2);
+        env.setParallelism(p);
         env.setStreamTimeCharacteristic(TimeCharacteristic.IngestionTime);
 
         DataStream<AdultData> data = env.addSource(new AdultDataSource(dataFilePath));
@@ -87,38 +88,11 @@ public class KeyedJob {
         // Generalize Quasi Identifiers
         DataStream<AdultData> genData = data.map(new Generalize());
 
-/*
-        KeyedStream<AdultData, String> keyedGenData = genData.keyBy(new KeySelector<AdultData, String>() {
-            public String getKey(AdultData tuple) {
-                String TupleQuasiString = tuple.QuasiToString(QID);
-                return TupleQuasiString;
-            }
-        });
-*/
-/*
-        DataStream<Integer> output = genData
-                .keyBy(new KeySelector<AdultData, String>() {
-                    public String getKey(AdultData tuple) {
-                        String TupleQuasiString = tuple.QuasiToString(QID);
-                        return TupleQuasiString;
-                    }
-                })
-                .countWindow(k)
-                .apply(new WindowFunction<AdultData, Integer, String, GlobalWindow>() {
-                    public void apply (String key, GlobalWindow window, Iterable<AdultData> values, Collector<Integer> out) throws Exception {
-                        int count = 0;
-                        for (AdultData t: values) {
-                            count += 1;
-                        }
-                        out.collect (new Integer(count));
-                    }
-                });
-*/
         DataStream<AdultData> output = genData
                 .keyBy(new QidKey())
                 //.countWindow(k)
                 .window(GlobalWindows.create())
-                .trigger(PurgingTrigger.of(lDiversityTrigger.of(k, 4)))
+                .trigger(PurgingTrigger.of(lDiversityTrigger.of(k, l)))
                 .process(new Release());
                 //.apply(new KAnonymize());
 
@@ -138,6 +112,9 @@ public class KeyedJob {
         private final MapStateDescriptor<String, Integer> stateMap =
                 new MapStateDescriptor<>("map", StringSerializer.INSTANCE, IntSerializer.INSTANCE);
 
+        private final ReducingStateDescriptor<Long> stateDesc =
+                new ReducingStateDescriptor<>("count", new Sum(), LongSerializer.INSTANCE);
+
 
         private lDiversityTrigger(int k, int l) {
             // Constructor
@@ -149,7 +126,6 @@ public class KeyedJob {
             return new lDiversityTrigger<>(k, l);
         }
 
-        // All methods below are copied from CountTrigger
         @Override
         public TriggerResult onElement(Object element, long timestamp, W window, TriggerContext ctx) throws Exception {
             // Object element is the tuple
@@ -158,24 +134,20 @@ public class KeyedJob {
             String sensitiveData = ad.getAttribute(this.sensitive);
             // Get the MapState, which is a map with keys and counters.
             MapState<String, Integer> diversityMap = ctx.getPartitionedState(stateMap);
+            ReducingState<Long> count = ctx.getPartitionedState(stateDesc);
 
-            // Adding the tuple to the map
-            if (diversityMap.contains(sensitiveData)) {// If sensdata in map
-                //get count
-                int count = diversityMap.get(sensitiveData);
-                count++;
-                diversityMap.put(sensitiveData, count);
-            } else {
-                //put count = 1
-                diversityMap.put(sensitiveData, 1);
-            }
+            // Add 1 to the counter to keep track of number of elements in window.
+            count.add(1L);
 
-            // We actually never use the counters, because checking the number of entries is easier..
-            if (Iterables.size(diversityMap.entries()) >= this.k){
+            // Add a tuple with the sensitiveData as key, in order to keep track of diversity.
+            diversityMap.put(sensitiveData, 1);
+
+            if (count.get() >= this.k){
                 // If number of tuples > k (If k-anonymous)
                 if(Iterables.size(diversityMap.keys()) >= this.l){
                     // If number of keys > l (If l-diverse)
                     diversityMap.clear();
+                    count.clear();
                     return TriggerResult.FIRE;
                 }
             }
@@ -196,6 +168,15 @@ public class KeyedJob {
         public void clear(W window, TriggerContext ctx) throws Exception {
             ctx.getPartitionedState(stateMap).clear();
         }
+        private static class Sum implements ReduceFunction<Long> {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public Long reduce(Long value1, Long value2) throws Exception {
+                return value1 + value2;
+            }
+
+        }
 
     }
 
@@ -212,40 +193,9 @@ public class KeyedJob {
         }
     }
 
-    /*
-    public static class KAnonymize2 extends ProcessWindowFunction<AdultData, AdultData, String, GlobalWindow> {
-        @Override
-        public void process(String key, Context context, Iterable<AdultData> elements, Collector<AdultData> out) throws Exception {
-            int count = 0;
-            System.out.println("Releasing bucket! " + key);
-            for (AdultData t: elements) {
-                count += 1;
-                out.collect (t);
-            }
-            //tag += 1;
-            System.out.println("Number of records: " + count);
-            System.out.println("CurrentProcessingTime: " + context.currentProcessingTime());
-            System.out.println("CurrentWindow: " + context.window());
-        }
-    }
-    */
 
 
-/*
-    public static class KAnonymize implements WindowFunction<AdultData, AdultData, String, GlobalWindow> {
-        @Override
-        public void apply (String key, GlobalWindow window, Iterable<AdultData> values, Collector<AdultData> out) throws Exception {
-            int count = 0;
-            System.out.println("Releasing bucket! " + key);
-            for (AdultData t: values) {
-                count += 1;
-                out.collect (t);
-            }
-            //tag += 1;
-            System.out.println("Number of records: " + count);
-        }
-    }
-*/
+
     public static class QidKey implements KeySelector<AdultData, String> {
         @Override
         public String getKey(AdultData tuple) {
