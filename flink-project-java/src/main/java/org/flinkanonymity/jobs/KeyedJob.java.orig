@@ -89,6 +89,8 @@ public class KeyedJob {
         // Generalize Quasi Identifiers
         DataStream<AdultData> genData = data.map(new Generalize());
 
+<<<<<<< HEAD
+=======
         DataStream<Tuple2<AdultData, Long>> tsGenData = genData
                 .keyBy(new QidKey())
                 .process(new ProcessTimestamp());
@@ -123,6 +125,7 @@ public class KeyedJob {
                 });
 */
 
+>>>>>>> 9034f35259c6adf6389ab6c66c510c9c92021e4f
         DataStream<AdultData> output = genData
                 .keyBy(new QidKey())
                 //.countWindow(k)
