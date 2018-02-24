@@ -32,6 +32,7 @@ import org.apache.flink.streaming.api.functions.ProcessFunction;
 
 import org.flinkanonymity.datatypes.*;
 import org.flinkanonymity.sources.AdultDataSource;
+import sun.management.FileSystem;
 
 import java.util.HashMap;
 
@@ -80,8 +81,6 @@ public class KeyedJob {
 
         DataStream<AdultData> data = env.addSource(new AdultDataSource(dataFilePath));
 
-        // Generalize Quasi Identifiers
-        DataStream<AdultData> genData = data.map(new Generalize());
 /* - Some manual calculations of timestamps
         DataStream<Tuple2<AdultData, Long>> tsGenData = genData
                 .keyBy(new QidKey())
@@ -89,7 +88,7 @@ public class KeyedJob {
 
         tsGenData.print();
 */
-        DataStream<AdultData> output = genData
+        // DataStream<AdultData> output = genData;
         // DataStreamSink<AdultData> output = new DataStreamSink<AdultData>();
 
         // Generalize Quasi Identifiers
@@ -106,8 +105,7 @@ public class KeyedJob {
                 .process(new Release());
 
         output.print();
-        output.writeAsText("../output/test.csv").setParallelism(1);
-
+        output.writeAsText("../output/test.csv", org.apache.flink.core.fs.FileSystem.WriteMode.OVERWRITE).setParallelism(1);
         env.execute();
     }
 

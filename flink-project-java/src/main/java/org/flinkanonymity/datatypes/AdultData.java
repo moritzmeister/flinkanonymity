@@ -76,7 +76,7 @@ public class AdultData {
             this.sensitive_class = Integer.toString((int)(Math.random()*10)); // Creating mock classes
         }
         else if (args.length != 12) {
-            throw new RuntimeException("Number of arguments does not equal 11: " + line);
+            throw new RuntimeException("Number of arguments does not equal 12: " + line);
         }
         else{
             this.sensitive = args[10];

@@ -47,26 +47,34 @@ public class AdultDataSource implements SourceFunction<AdultData> {
     private void generateStream(SourceContext<AdultData> sourceContext) throws Exception {
         String line;
         AdultData data;
+        long idCount = 0L;
         System.out.println("Generating stream: ");
         ArrayList<HashMap<String, Integer>> frequencies = new ArrayList<HashMap<String, Integer>>();
-        for (int i = 0; i < 11; i ++){
+        for (int i = 0; i < 12; i ++){
             frequencies.add(new HashMap<String, Integer>());
         }
 
         while (reader.ready() && (line = reader.readLine()) != null) {
             // read first CensusData
             data = new AdultData(line);
+            idCount = data.id;
             frequencies = updateFrequencies(frequencies, line);
 
             // This would also be the place to implement timestamps and such fun..
 
             // emit data
             //System.out.println(data);
-            sourceContext.collect(data);
+            //sourceContext.collect(data);
             // It is also possible to use collectWithTimestamp in order to handle timestamps:
             // https://ci.apache.org/projects/flink/flink-docs-master/api/java/org/apache/flink/streaming/api/functions/source/SourceFunction.SourceContext.html
         }
-        while ()
+        for (int i = 0; i < 40000; i++){
+            idCount += 1L;
+            line = createTuple(frequencies, (idCount));
+            data = new AdultData(line);
+            sourceContext.collect(data);
+
+        }
 
     }
 
@@ -94,10 +102,16 @@ public class AdultDataSource implements SourceFunction<AdultData> {
         return "Wrong";
     }
 
-    public String createTuple(ArrayList<HashMap<String, Integer>> frequencies){
+    public String createTuple(ArrayList<HashMap<String, Integer>> frequencies, long id){
         StringBuilder sb = new StringBuilder();
+        sb.append(id);
+        int count = 0;
         for (HashMap h : frequencies){
-            sb.append(randomAttribute(h)).append(";");
+            if (count > 0){
+                sb.append(";");
+                sb.append(randomAttribute(h));
+            }
+            count++;
         }
         return sb.toString();
     }
