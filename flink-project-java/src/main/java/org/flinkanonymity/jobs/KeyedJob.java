@@ -90,25 +90,35 @@ public class KeyedJob {
         tsGenData.print();
 */
         DataStream<AdultData> output = genData
+        // DataStreamSink<AdultData> output = new DataStreamSink<AdultData>();
+
+        // Generalize Quasi Identifiers
+        DataStream<AdultData> genData = data.map(new Generalize());
+
+        DataStream<AdultData> tsGenData = genData
+                .keyBy(new QidKey())
+                .process(new ProcessTimestamp());
+
+        DataStream<AdultData> output = tsGenData
                 .keyBy(new QidKey())
                 .window(GlobalWindows.create())
                 .trigger(PurgingTrigger.of(lDiversityTrigger.of(k, l)))
                 .process(new Release());
 
         output.print();
+        output.writeAsText("../output/test.csv").setParallelism(1);
 
-        //genData.print();
         env.execute();
     }
 
-    public static class ProcessTimestamp extends ProcessFunction<AdultData, Tuple2<AdultData,Long>> {
+    public static class ProcessTimestamp extends ProcessFunction<AdultData, AdultData> {
         // Transfrom a DataStream of AdultData elements into a stream of AdultData elements with ingestion timestamp
         @Override
-        public void processElement(AdultData value, Context ctx, Collector<Tuple2<AdultData,Long>> out) throws Exception {
-            out.collect(new Tuple2<AdultData, Long>(value, ctx.timestamp()));
+        public void processElement(AdultData value, Context ctx, Collector<AdultData> out) throws Exception {
+            value.setTimestamp("ingTimestamp", ctx.timestamp());
+            out.collect(value);
         }
     }
-
 
     public static class lDiversityTrigger<W extends Window> extends Trigger<Object, W> {
 
@@ -191,6 +201,7 @@ public class KeyedJob {
         public void process(String key, Context context, Iterable<AdultData> elements, Collector<AdultData> out) throws Exception {
             System.out.println("Releasing bucket! " + key);
             for (AdultData t: elements) {
+                t.setTimestamp("procTimestamp", context.currentProcessingTime());
                 out.collect (t);
             }
             System.out.println("Number of records: " + Iterables.size(elements));
@@ -198,9 +209,6 @@ public class KeyedJob {
             System.out.println("CurrentWindow: " + context.window());
         }
     }
-
-
-
 
     public static class QidKey implements KeySelector<AdultData, String> {
         @Override

@@ -28,8 +28,8 @@ flink-project-java/.idea/
 *.class
 *.ipr
 sample-data/
+output/
 
 # Maven
 flink-project-java/log/
 flink-project-java/target/
-
