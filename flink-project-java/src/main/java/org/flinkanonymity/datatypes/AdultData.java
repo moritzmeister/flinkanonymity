@@ -26,6 +26,8 @@ public class AdultData {
     public String salary;
     public String sensitive;
     public String sensitive_class;
+    public Long ingTimestamp;
+    public Long procTimestamp;
 
 
     public AdultData(){
@@ -40,6 +42,8 @@ public class AdultData {
         this.salary = "";
         this.sensitive = "";
         this.sensitive_class = "";
+        this.ingTimestamp = 0L;
+        this.procTimestamp = 0L;
     }
 
     public AdultData(String sex, String age, String race, String marst, String educ, String country, String workclass,
@@ -56,6 +60,8 @@ public class AdultData {
         this.salary = salary;
         this.sensitive = sensitive;
         this.sensitive_class = sensitive_class;
+        this.ingTimestamp = 0L;
+        this.procTimestamp = 0L;
     }
 
     public AdultData(String line){
@@ -85,9 +91,37 @@ public class AdultData {
         this.workclass = args[6];
         this.occ = args[7];
         this.salary = args[8];
+        this.ingTimestamp = 0L;
+        this.procTimestamp = 0L;
 
         if (this.age == null){
             throw new RuntimeException("Age is null! : " + line);
+        }
+    }
+
+    public void setTimestamp(String attribute, Long value) {
+        //sets the timestamp
+        if (attribute == "procTimestamp") {
+            this.procTimestamp = value;
+        }
+        else if (attribute == "ingTimestamp") {
+            this.ingTimestamp = value;
+        }
+        else {
+            throw new RuntimeException("Only ingTimestamp or procTimestamp.");
+        }
+    }
+
+    public Long getTimestamp(String attribute) {
+        //returns the timestamp of the object
+        if (attribute == "procTimestamp") {
+            return this.procTimestamp;
+        }
+        else if (attribute == "ingTimestamp") {
+            return this.ingTimestamp;
+        }
+        else {
+            throw new RuntimeException("Only ingTimestamp or procTimestamp.");
         }
     }
 
@@ -199,7 +233,9 @@ public class AdultData {
         sb.append(occ).append(",");
         sb.append(salary).append(",");
         sb.append(sensitive).append(",");
-        sb.append(sensitive_class);
+        sb.append(sensitive_class).append(",");
+        sb.append(ingTimestamp).append(",");
+        sb.append(procTimestamp);
         return sb.toString();
     }
 

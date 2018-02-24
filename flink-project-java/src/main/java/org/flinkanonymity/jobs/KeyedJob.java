@@ -41,7 +41,7 @@ public class KeyedJob {
     static HashMap<String, Bucket> hashMap;
     static int k = 10;
     static int l = 5;
-    static int p = 50;
+    static int p = 5;
 
     public static void main(String[] args) throws Exception {
         ParameterTool params = ParameterTool.fromArgs(args);
@@ -68,13 +68,8 @@ public class KeyedJob {
         //Generalization workclass = new Generalization("workclass", workclass_hierarchy,1);
         Generalization country = new Generalization("country", country_hierarchy,1);
 
-
-        // Generalization race = new Generalization("race", educ_hierarchy,1);
-
         // Initialize QuasiIdentifier
         QID = new QuasiIdentifier(age, sex, race, educ, marst, country);
-        hashMap = new HashMap<>();
-
 
         // Setting up Environment
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
@@ -84,67 +79,33 @@ public class KeyedJob {
         DataStream<AdultData> data = env.addSource(new AdultDataSource(dataFilePath));
 
         // DataStreamSink<AdultData> output = new DataStreamSink<AdultData>();
-        // output.setParallelism(1);
 
         // Generalize Quasi Identifiers
         DataStream<AdultData> genData = data.map(new Generalize());
 
-        DataStream<Tuple2<AdultData, Long>> tsGenData = genData
+        DataStream<AdultData> tsGenData = genData
                 .keyBy(new QidKey())
                 .process(new ProcessTimestamp());
 
-        tsGenData.print();
-
-/*
-        KeyedStream<AdultData, String> keyedGenData = genData.keyBy(new KeySelector<AdultData, String>() {
-            public String getKey(AdultData tuple) {
-                String TupleQuasiString = tuple.QuasiToString(QID);
-                return TupleQuasiString;
-            }
-        });
-*/
-/*
-        DataStream<Integer> output = genData
-                .keyBy(new KeySelector<AdultData, String>() {
-                    public String getKey(AdultData tuple) {
-                        String TupleQuasiString = tuple.QuasiToString(QID);
-                        return TupleQuasiString;
-                    }
-                })
-                .countWindow(k)
-                .apply(new WindowFunction<AdultData, Integer, String, GlobalWindow>() {
-                    public void apply (String key, GlobalWindow window, Iterable<AdultData> values, Collector<Integer> out) throws Exception {
-                        int count = 0;
-                        for (AdultData t: values) {
-                            count += 1;
-                        }
-                        out.collect (new Integer(count));
-                    }
-                });
-*/
-
-        DataStream<AdultData> output = genData
+        DataStream<AdultData> output = tsGenData
                 .keyBy(new QidKey())
-                //.countWindow(k)
                 .window(GlobalWindows.create())
                 .trigger(PurgingTrigger.of(lDiversityTrigger.of(k, l)))
                 .process(new Release());
-                //.apply(new KAnonymize());
 
         output.print();
 
-        //genData.print();
         env.execute();
     }
 
-    public static class ProcessTimestamp extends ProcessFunction<AdultData, Tuple2<AdultData,Long>> {
+    public static class ProcessTimestamp extends ProcessFunction<AdultData, AdultData> {
         // Transfrom a DataStream of AdultData elements into a stream of AdultData elements with ingestion timestamp
         @Override
-        public void processElement(AdultData value, Context ctx, Collector<Tuple2<AdultData,Long>> out) throws Exception {
-            out.collect(new Tuple2<AdultData, Long>(value, ctx.timestamp()));
+        public void processElement(AdultData value, Context ctx, Collector<AdultData> out) throws Exception {
+            value.setTimestamp("ingTimestamp", ctx.timestamp());
+            out.collect(value);
         }
     }
-
 
     public static class lDiversityTrigger<W extends Window> extends Trigger<Object, W> {
 
@@ -228,6 +189,7 @@ public class KeyedJob {
         public void process(String key, Context context, Iterable<AdultData> elements, Collector<AdultData> out) throws Exception {
             System.out.println("Releasing bucket! " + key);
             for (AdultData t: elements) {
+                t.setTimestamp("procTimestamp", context.currentProcessingTime());
                 out.collect (t);
             }
             System.out.println("Number of records: " + Iterables.size(elements));
@@ -235,9 +197,6 @@ public class KeyedJob {
             System.out.println("CurrentWindow: " + context.window());
         }
     }
-
-
-
 
     public static class QidKey implements KeySelector<AdultData, String> {
         @Override
