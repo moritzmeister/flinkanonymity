@@ -94,6 +94,7 @@ public class KeyedJob {
                 .process(new Release());
 
         output.print();
+        output.writeAsText("../output/test.csv").setParallelism(1);
 
         env.execute();
     }

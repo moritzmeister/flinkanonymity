@@ -14,7 +14,7 @@ public class AdultData {
  * - occupation
  * - salary-class
  */
-
+    public Long id;
     public String sex;
     public String age;
     public String race;
@@ -31,6 +31,7 @@ public class AdultData {
 
 
     public AdultData(){
+        this.id = 0L;
         this.sex = "";
         this.age = "";
         this.race = "";
@@ -46,9 +47,10 @@ public class AdultData {
         this.procTimestamp = 0L;
     }
 
-    public AdultData(String sex, String age, String race, String marst, String educ, String country, String workclass,
+    public AdultData(Long id, String sex, String age, String race, String marst, String educ, String country, String workclass,
                       String occ, String salary, String sensitive, String sensitive_class) {
         /* Constructs a AdultData Object from 9 String inputs.*/
+        this.id = id;
         this.sex = sex;
         this.age = age;
         this.race = race;
@@ -68,29 +70,29 @@ public class AdultData {
         /* Constructs a CensusData Object from a comma separated string input. */
         String[] args = line.split(";");
 
-        if (args.length == 9){
+        if (args.length == 10){
             // Temporary test while not having the sensitive data.
             this.sensitive = "Mock";
             this.sensitive_class = Integer.toString((int)(Math.random()*10)); // Creating mock classes
         }
-        else if (args.length != 11) {
+        else if (args.length != 12) {
             throw new RuntimeException("Number of arguments does not equal 11: " + line);
         }
         else{
-            this.sensitive = args[9];
-            this.sensitive_class = args[10];
+            this.sensitive = args[10];
+            this.sensitive_class = args[11];
         }
 
-
-        this.sex = args[0];
-        this.age = args[1];
-        this.race = args[2];
-        this.marst = args[3];
-        this.educ = args[4];
-        this.country = args[5];
-        this.workclass = args[6];
-        this.occ = args[7];
-        this.salary = args[8];
+        this.id = Long.parseLong(args[0], 10);
+        this.sex = args[1];
+        this.age = args[2];
+        this.race = args[3];
+        this.marst = args[4];
+        this.educ = args[5];
+        this.country = args[6];
+        this.workclass = args[7];
+        this.occ = args[8];
+        this.salary = args[9];
         this.ingTimestamp = 0L;
         this.procTimestamp = 0L;
 
@@ -222,7 +224,7 @@ public class AdultData {
     public String toString() {
         /* Returns the object attributes as a comma separated string */
         StringBuilder sb = new StringBuilder();
-        sb.append("AdultData Object: ");
+        sb.append(id).append(",");
         sb.append(sex).append(",");
         sb.append(age).append(",");
         sb.append(race).append(",");
