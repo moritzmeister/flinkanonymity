@@ -41,14 +41,16 @@ public class KeyedJob {
     static HashMap<String, Bucket> hashMap;
     static int k = 10;
     static int l = 5;
-    static int p = 50;
+    static int p = 5;
 
     public static void main(String[] args) throws Exception {
         ParameterTool params = ParameterTool.fromArgs(args);
         // final String filePath = params.getRequired("input");
 
-        // Set file paths
+        // Set data file path
         String dataFilePath = "../sample-data/arx_adult/adult_sensitive.csv";
+
+        // Set Hierarchy files paths.
         String sex_hierarchy = "../sample-data/arx_adult/adult_hierarchy_sex.csv";
         String age_hierarchy = "../sample-data/arx_adult/adult_hierarchy_age.csv";
         String race_hierarchy = "../sample-data/arx_adult/adult_hierarchy_race.csv";
@@ -68,13 +70,8 @@ public class KeyedJob {
         //Generalization workclass = new Generalization("workclass", workclass_hierarchy,1);
         Generalization country = new Generalization("country", country_hierarchy,1);
 
-
-        // Generalization race = new Generalization("race", educ_hierarchy,1);
-
         // Initialize QuasiIdentifier
         QID = new QuasiIdentifier(age, sex, race, educ, marst, country);
-        hashMap = new HashMap<>();
-
 
         // Setting up Environment
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
@@ -83,53 +80,20 @@ public class KeyedJob {
 
         DataStream<AdultData> data = env.addSource(new AdultDataSource(dataFilePath));
 
-        // DataStreamSink<AdultData> output = new DataStreamSink<AdultData>();
-        // output.setParallelism(1);
-
         // Generalize Quasi Identifiers
         DataStream<AdultData> genData = data.map(new Generalize());
-
+/* - Some manual calculations of timestamps
         DataStream<Tuple2<AdultData, Long>> tsGenData = genData
                 .keyBy(new QidKey())
                 .process(new ProcessTimestamp());
 
         tsGenData.print();
-
-/*
-        KeyedStream<AdultData, String> keyedGenData = genData.keyBy(new KeySelector<AdultData, String>() {
-            public String getKey(AdultData tuple) {
-                String TupleQuasiString = tuple.QuasiToString(QID);
-                return TupleQuasiString;
-            }
-        });
 */
-/*
-        DataStream<Integer> output = genData
-                .keyBy(new KeySelector<AdultData, String>() {
-                    public String getKey(AdultData tuple) {
-                        String TupleQuasiString = tuple.QuasiToString(QID);
-                        return TupleQuasiString;
-                    }
-                })
-                .countWindow(k)
-                .apply(new WindowFunction<AdultData, Integer, String, GlobalWindow>() {
-                    public void apply (String key, GlobalWindow window, Iterable<AdultData> values, Collector<Integer> out) throws Exception {
-                        int count = 0;
-                        for (AdultData t: values) {
-                            count += 1;
-                        }
-                        out.collect (new Integer(count));
-                    }
-                });
-*/
-
         DataStream<AdultData> output = genData
                 .keyBy(new QidKey())
-                //.countWindow(k)
                 .window(GlobalWindows.create())
                 .trigger(PurgingTrigger.of(lDiversityTrigger.of(k, l)))
                 .process(new Release());
-                //.apply(new KAnonymize());
 
         output.print();
 
@@ -150,7 +114,6 @@ public class KeyedJob {
 
         private final int l, k;
         private String sensitive = "sensitive_class";
-
 
         private final MapStateDescriptor<String, Integer> stateMap =
                 new MapStateDescriptor<>("map", StringSerializer.INSTANCE, IntSerializer.INSTANCE);
@@ -250,10 +213,11 @@ public class KeyedJob {
     public static class Generalize implements MapFunction<AdultData, AdultData>{
         @Override
         public AdultData map(AdultData adult) throws Exception{
+            // Use arx to generalize
             return QID.generalize(adult);
         }
     }
-
+/*
     public static class LDiversify implements FlatMapFunction<AdultData, AdultData>{
         @Override
         public void flatMap(AdultData tuple, Collector<AdultData> out) throws Exception {
@@ -276,4 +240,5 @@ public class KeyedJob {
             }
         }
     }
+*/
 }
