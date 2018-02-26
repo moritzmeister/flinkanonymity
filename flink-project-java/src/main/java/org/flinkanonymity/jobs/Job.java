@@ -22,6 +22,8 @@ public class Job {
     static HashMap<String, Bucket> hashMap;
     static int k = 5;
     static int l = 5;
+    static int uniqueAdults = 5000;
+    static int streamLength = 20000;
 
     public static void main(String[] args) throws Exception {
         ParameterTool params = ParameterTool.fromArgs(args);
@@ -61,7 +63,7 @@ public class Job {
         env.setParallelism(1);
         env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
 
-        DataStream<AdultData> data = env.addSource(new AdultDataSource(dataFilePath));
+        DataStream<AdultData> data = env.addSource(new AdultDataSource(dataFilePath, streamLength, uniqueAdults));
 
         // DataStreamSink<AdultData> output = new DataStreamSink<AdultData>();
         // output.setParallelism(1);

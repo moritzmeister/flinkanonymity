@@ -35,7 +35,7 @@ import org.flinkanonymity.sources.AdultDataSource;
 import org.flinkanonymity.process.Release;
 import org.flinkanonymity.trigger.lDiversityTrigger;
 import org.flinkanonymity.process.ProcessTimestamp;
-//import org.flinkanonymity.keyselector.QidKey;
+
 
 import java.util.HashMap;
 
@@ -46,13 +46,18 @@ public class KeyedJob {
     static int k = 10;
     static int l = 5;
     static int p = 5;
+    static int uniqueAdults = 5000;
+    static int streamLength = 20000;
+
 
     public static void main(String[] args) throws Exception {
         ParameterTool params = ParameterTool.fromArgs(args);
         // final String filePath = params.getRequired("input");
 
-        // Set file paths
+        // Set data file path
         String dataFilePath = "../sample-data/arx_adult/adult_sensitive.csv";
+
+        // Set Hierarchy files paths.
         String sex_hierarchy = "../sample-data/arx_adult/adult_hierarchy_sex.csv";
         String age_hierarchy = "../sample-data/arx_adult/adult_hierarchy_age.csv";
         String race_hierarchy = "../sample-data/arx_adult/adult_hierarchy_race.csv";
@@ -80,8 +85,16 @@ public class KeyedJob {
         env.setParallelism(p);
         env.setStreamTimeCharacteristic(TimeCharacteristic.IngestionTime);
 
-        DataStream<AdultData> data = env.addSource(new AdultDataSource(dataFilePath));
+        DataStream<AdultData> data = env.addSource(new AdultDataSource(dataFilePath, streamLength, uniqueAdults));
 
+/* - Some manual calculations of timestamps
+        DataStream<Tuple2<AdultData, Long>> tsGenData = genData
+                .keyBy(new QidKey())
+                .process(new ProcessTimestamp());
+
+        tsGenData.print();
+*/
+        // DataStream<AdultData> output = genData;
         // DataStreamSink<AdultData> output = new DataStreamSink<AdultData>();
 
         // Generalize Quasi Identifiers
@@ -99,11 +112,9 @@ public class KeyedJob {
                 .process(new Release());
 
         output.print();
-        output.writeAsText("../output/test.csv").setParallelism(1);
-
+        output.writeAsText("../output/test.csv", org.apache.flink.core.fs.FileSystem.WriteMode.OVERWRITE).setParallelism(1);
         env.execute();
     }
-
 
     public static class QidKey implements KeySelector<AdultData, String> {
         @Override
@@ -116,10 +127,11 @@ public class KeyedJob {
     public static class Generalize implements MapFunction<AdultData, AdultData>{
         @Override
         public AdultData map(AdultData adult) throws Exception{
+            // Use arx to generalize
             return QID.generalize(adult);
         }
     }
-
+/*
     public static class LDiversify implements FlatMapFunction<AdultData, AdultData>{
         @Override
         public void flatMap(AdultData tuple, Collector<AdultData> out) throws Exception {
@@ -142,4 +154,5 @@ public class KeyedJob {
             }
         }
     }
+*/
 }
