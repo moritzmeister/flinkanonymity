@@ -1,5 +1,5 @@
 package org.flinkanonymity.jobs;
-
+/*
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.shaded.com.google.common.collect.Iterables;
 import org.apache.flink.streaming.api.TimeCharacteristic;
@@ -26,33 +26,28 @@ import org.apache.flink.streaming.api.windowing.windows.Window;
 import org.apache.flink.streaming.api.windowing.windows.GlobalWindow;
 import org.apache.flink.util.OutputTag;
 import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
-//import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction.Context;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.streaming.api.functions.ProcessFunction;
 
 import org.flinkanonymity.datatypes.*;
 import org.flinkanonymity.sources.AdultDataSource;
-import org.flinkanonymity.process.Release;
+import org.flinkanonymity.map.Generalize;
+import org.flinkanonymity.keyselector.QidKey;
+import org.flinkanonymity.process.*;
 import org.flinkanonymity.trigger.lDiversityTrigger;
-import org.flinkanonymity.process.ProcessTimestamp;
-//import org.flinkanonymity.keyselector.QidKey;
 
-import java.util.HashMap;
-
-public class KeyedJob {
-    // Set up QID and Hashmap for global use.
+public class Evaluation {
+    // Set up QID for global use.
     static QuasiIdentifier QID;
-    static HashMap<String, Bucket> hashMap;
-    static int k = 10;
-    static int l = 5;
-    static int p = 5;
+    static int k = 4;
+    static int l = 4;
 
     public static void main(String[] args) throws Exception {
         ParameterTool params = ParameterTool.fromArgs(args);
         // final String filePath = params.getRequired("input");
 
         // Set file paths
-        String dataFilePath = "../sample-data/arx_adult/adult_sensitive.csv";
+        String dataFilePath = "../sample-data/arx_adult/adult_subset.csv";
         String sex_hierarchy = "../sample-data/arx_adult/adult_hierarchy_sex.csv";
         String age_hierarchy = "../sample-data/arx_adult/adult_hierarchy_age.csv";
         String race_hierarchy = "../sample-data/arx_adult/adult_hierarchy_race.csv";
@@ -77,69 +72,31 @@ public class KeyedJob {
 
         // Setting up Environment
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        env.setParallelism(p);
         env.setStreamTimeCharacteristic(TimeCharacteristic.IngestionTime);
 
         DataStream<AdultData> data = env.addSource(new AdultDataSource(dataFilePath));
 
-        // DataStreamSink<AdultData> output = new DataStreamSink<AdultData>();
-
         // Generalize Quasi Identifiers
         DataStream<AdultData> genData = data.map(new Generalize());
 
-        // Write Flink ingestion time into the AdultData objects
-        DataStream<AdultData> tsGenData = genData
+        DataStream<Tuple2<AdultData, Long>> tsGenData = genData
                 .keyBy(new QidKey())
                 .process(new ProcessTimestamp());
 
-        DataStream<AdultData> output = tsGenData
+        tsGenData.print();
+
+        DataStream<AdultData> output = genData
                 .keyBy(new QidKey())
+                //.countWindow(k)
                 .window(GlobalWindows.create())
-                .trigger(PurgingTrigger.of(lDiversityTrigger.of(k, l)))
+                .trigger(PurgingTrigger.of(lDiversityTrigger.of(k, 4)))
                 .process(new Release());
 
         output.print();
-        output.writeAsText("../output/test.csv").setParallelism(1);
 
+        //genData.print();
         env.execute();
     }
 
 
-    public static class QidKey implements KeySelector<AdultData, String> {
-        @Override
-        public String getKey(AdultData tuple) {
-            String TupleQuasiString = tuple.QuasiToString(QID);
-            return TupleQuasiString;
-        }
-    }
-
-    public static class Generalize implements MapFunction<AdultData, AdultData>{
-        @Override
-        public AdultData map(AdultData adult) throws Exception{
-            return QID.generalize(adult);
-        }
-    }
-
-    public static class LDiversify implements FlatMapFunction<AdultData, AdultData>{
-        @Override
-        public void flatMap(AdultData tuple, Collector<AdultData> out) throws Exception {
-            // get bucket
-            String TupleQuasiString = tuple.QuasiToString(QID);
-            if (!hashMap.containsKey(TupleQuasiString)) { // If this bucket has never been reached before
-                hashMap.put(TupleQuasiString, new LBucket(TupleQuasiString)); // Create a bucket. Sensitive dataname could also be specified, default is sensitive_class.
-            }
-            LBucket lb = (LBucket) hashMap.get(TupleQuasiString); // Get the bucket
-            lb.add(tuple);
-
-            if (lb.isKAnonymous(k)) { // if bucket satisfies k-anonymity
-                if (lb.isLDiverse(l)){
-                    AdultData[] tuples = lb.dropBuffer(); // get tuples and drop bucket
-                    System.out.println("Releasing bucket! " + tuples[0].QuasiToString(QID));
-                    for (AdultData t : tuples) { // output tuples
-                        out.collect(t);
-                    }
-                }
-            }
-        }
-    }
-}
+}*/
