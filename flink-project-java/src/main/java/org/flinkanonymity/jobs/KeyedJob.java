@@ -43,6 +43,9 @@ public class KeyedJob {
     static int k = 10;
     static int l = 5;
     static int p = 5;
+    static int uniqueAdults = 5000;
+    static int streamLength = 20000;
+
 
     public static void main(String[] args) throws Exception {
         ParameterTool params = ParameterTool.fromArgs(args);
@@ -79,7 +82,7 @@ public class KeyedJob {
         env.setParallelism(p);
         env.setStreamTimeCharacteristic(TimeCharacteristic.IngestionTime);
 
-        DataStream<AdultData> data = env.addSource(new AdultDataSource(dataFilePath));
+        DataStream<AdultData> data = env.addSource(new AdultDataSource(dataFilePath), streamLength, uniqueAdults);
 
 /* - Some manual calculations of timestamps
         DataStream<Tuple2<AdultData, Long>> tsGenData = genData

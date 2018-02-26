@@ -29,6 +29,8 @@ public class AdultData {
     public Long ingTimestamp;
     public Long procTimestamp;
 
+    public int uniqueAdults = 5000;
+
 
     public AdultData(){
         this.id = 0L;

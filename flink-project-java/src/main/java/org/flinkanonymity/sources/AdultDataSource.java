@@ -20,11 +20,14 @@ public class AdultDataSource implements SourceFunction<AdultData> {
     private final String dataFilePath;
     private transient BufferedReader reader;
     private transient InputStream fileStream;
+    private int streamLength;
+    private int uniqueAdults;
 
-    public AdultDataSource(String dataFilePath) {
+
+    public AdultDataSource(String dataFilePath, int uniqueAdults, int streamLength) {
         this.dataFilePath = dataFilePath;
-        System.out.println("Construct AdultDataSource");
-
+        this.uniqueAdults = uniqueAdults;
+        this.streamLength = streamLength;
     }
 
     @Override
@@ -56,26 +59,27 @@ public class AdultDataSource implements SourceFunction<AdultData> {
 
         while (reader.ready() && (line = reader.readLine()) != null) {
             // read first CensusData
-            data = new AdultData(line);
-            idCount = data.id;
+            //data = new AdultData(line);
+            // idCount = data.id;
             frequencies = updateFrequencies(frequencies, line);
 
             // This would also be the place to implement timestamps and such fun..
 
             // emit data
             //System.out.println(data);
-            //sourceContext.collect(data);
+            // sourceContext.collect(data);
             // It is also possible to use collectWithTimestamp in order to handle timestamps:
             // https://ci.apache.org/projects/flink/flink-docs-master/api/java/org/apache/flink/streaming/api/functions/source/SourceFunction.SourceContext.html
         }
-        for (int i = 0; i < 40000; i++){
-            idCount += 1L;
-            line = createTuple(frequencies, (idCount));
+
+        // Generate sample adultdata objects with same distribution as source data. 
+        for (int i = 0; i < streamLength; i++){
+            //idCount += 1L;
+            long randId = (long)(Math.random()*uniqueAdults);
+            line = createTuple(frequencies, (randId));
             data = new AdultData(line);
             sourceContext.collect(data);
-
         }
-
     }
 
     public String randomAttribute(HashMap<String, Integer> h){

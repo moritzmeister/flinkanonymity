@@ -1,8 +1,8 @@
 Pseudo code algorithm
 
-Input: A stream T of tuples to be l-diversified, a set Q of q quasi-identifier attributes, a set SE of s sensitive attributes, a set of g generalizations G, parameters k, l and p. 
+Input: A stream T of tuples to be l-diversified, a set Q of q quasi-identifier attributes, a set S of s sensitive attributes, a set of g generalizations G, parameters k, l and p. 
 
-Output: A stream of l-diverse full-domain generalizations of S
+Output: A stream of l-diverse full-domain generalizations of T
 
 Initialization 
 
