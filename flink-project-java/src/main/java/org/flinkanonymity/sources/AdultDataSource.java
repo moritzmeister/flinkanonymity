@@ -72,7 +72,7 @@ public class AdultDataSource implements SourceFunction<AdultData> {
             // https://ci.apache.org/projects/flink/flink-docs-master/api/java/org/apache/flink/streaming/api/functions/source/SourceFunction.SourceContext.html
         }
 
-        // Generate sample adultdata objects with same distribution as source data. 
+        // Generate sample adultdata objects with same distribution as source data.
         for (int i = 0; i < streamLength; i++){
             //idCount += 1L;
             long randId = (long)(Math.random()*uniqueAdults);

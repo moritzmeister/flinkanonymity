@@ -82,7 +82,7 @@ public class KeyedJob {
         env.setParallelism(p);
         env.setStreamTimeCharacteristic(TimeCharacteristic.IngestionTime);
 
-        DataStream<AdultData> data = env.addSource(new AdultDataSource(dataFilePath), streamLength, uniqueAdults);
+        DataStream<AdultData> data = env.addSource(new AdultDataSource(dataFilePath, streamLength, uniqueAdults));
 
 /* - Some manual calculations of timestamps
         DataStream<Tuple2<AdultData, Long>> tsGenData = genData
