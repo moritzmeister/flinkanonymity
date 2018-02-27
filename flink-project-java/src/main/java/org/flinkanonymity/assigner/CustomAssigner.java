@@ -19,19 +19,16 @@ package org.flinkanonymity.assigner;
  */
 
 import org.apache.flink.streaming.api.windowing.assigners.WindowAssigner;
+import org.flinkanonymity.datatypes.AdultData;
 import org.flinkanonymity.trigger.CustomPurgingTrigger;
-import org.flinkanonymity.window.CustomWindow;
+import org.flinkanonymity.window.UniqueUserWindow;
 import org.apache.flink.annotation.Internal;
 import org.apache.flink.annotation.PublicEvolving;
 import org.apache.flink.api.common.ExecutionConfig;
 import org.apache.flink.api.common.typeutils.TypeSerializer;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.windowing.triggers.PurgingTrigger;
 import org.apache.flink.streaming.api.windowing.triggers.Trigger;
-import org.apache.flink.streaming.api.windowing.triggers.TriggerResult;
 import org.apache.flink.streaming.api.windowing.windows.GlobalWindow;
-import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
-import org.apache.flink.streaming.api.windowing.windows.Window;
 import org.flinkanonymity.trigger.lDiversityTrigger;
 
 import java.util.Collection;
@@ -45,7 +42,7 @@ import java.util.Collections;
  * windows.
  */
 @PublicEvolving
-public class CustomAssigner extends WindowAssigner<Object, CustomWindow> {
+public class CustomAssigner extends WindowAssigner<Object, UniqueUserWindow> {
     private static final long serialVersionUID = 1L;
     private final int k;
     private final int l;
@@ -56,12 +53,13 @@ public class CustomAssigner extends WindowAssigner<Object, CustomWindow> {
     }
 
     @Override
-    public Collection<CustomWindow> assignWindows(Object element, long timestamp, WindowAssignerContext context) {
-        return Collections.singletonList(CustomWindow.get());
+    public Collection<UniqueUserWindow> assignWindows(Object element, long timestamp, WindowAssignerContext context) {
+        AdultData tuple = (AdultData)element;
+        return Collections.singletonList(UniqueUserWindow.get(tuple.id));
     }
 
     @Override
-    public Trigger<Object, CustomWindow> getDefaultTrigger(StreamExecutionEnvironment env) {
+    public Trigger<Object, UniqueUserWindow> getDefaultTrigger(StreamExecutionEnvironment env) {
         //return CustomPurgingTrigger.of(lDiversityTrigger.of(k, l));
         return CustomPurgingTrigger.of(lDiversityTrigger.of(k, l));
 
@@ -84,8 +82,8 @@ public class CustomAssigner extends WindowAssigner<Object, CustomWindow> {
 
 
     @Override
-    public TypeSerializer<CustomWindow> getWindowSerializer(ExecutionConfig executionConfig) {
-        return new CustomWindow.Serializer();
+    public TypeSerializer<UniqueUserWindow> getWindowSerializer(ExecutionConfig executionConfig) {
+        return new UniqueUserWindow.Serializer();
     }
 
     @Override

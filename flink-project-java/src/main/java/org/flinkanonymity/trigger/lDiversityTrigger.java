@@ -1,7 +1,6 @@
 package org.flinkanonymity.trigger;
 
 import org.apache.flink.shaded.com.google.common.collect.Iterables;
-import org.apache.flink.streaming.api.windowing.windows.Window;
 import org.apache.flink.streaming.api.windowing.triggers.Trigger;
 import org.apache.flink.streaming.api.windowing.triggers.TriggerResult;
 import org.apache.flink.api.common.state.MapState;
@@ -14,9 +13,9 @@ import org.apache.flink.api.common.state.ReducingStateDescriptor;
 import org.apache.flink.api.common.functions.ReduceFunction;
 
 import org.flinkanonymity.datatypes.AdultData;
-import org.flinkanonymity.window.CustomWindow;
+import org.flinkanonymity.window.UniqueUserWindow;
 
-public class lDiversityTrigger<W extends CustomWindow> extends Trigger<Object, W> {
+public class lDiversityTrigger<W extends UniqueUserWindow> extends Trigger<Object, W> {
 
     private final int l, k;
     private String sensitive = "sensitive_class";
@@ -35,7 +34,7 @@ public class lDiversityTrigger<W extends CustomWindow> extends Trigger<Object, W
         this.l = l;
     }
 
-    public static <W extends CustomWindow> lDiversityTrigger<W> of(int k, int l) {
+    public static <W extends UniqueUserWindow> lDiversityTrigger<W> of(int k, int l) {
         return new lDiversityTrigger<>(k, l);
     }
 

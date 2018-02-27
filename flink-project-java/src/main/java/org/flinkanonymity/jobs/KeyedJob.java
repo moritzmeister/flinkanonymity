@@ -47,8 +47,8 @@ public class KeyedJob {
     static HashMap<String, Bucket> hashMap;
     static int k = 10;
     static int l = 5;
-    static int p = 5;
-    static int uniqueAdults = 5000;
+    static int p = 1;
+    static int uniqueAdults = 15000;
     static int streamLength = 20000;
 
 

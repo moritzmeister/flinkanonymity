@@ -1,14 +1,13 @@
 package org.flinkanonymity.process;
 
 import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
-import org.apache.flink.streaming.api.windowing.windows.GlobalWindow;
 import org.apache.flink.util.Collector;
 import org.apache.flink.shaded.com.google.common.collect.Iterables;
 
 import org.flinkanonymity.datatypes.AdultData;
-import org.flinkanonymity.window.CustomWindow;
+import org.flinkanonymity.window.UniqueUserWindow;
 
-public class Release extends ProcessWindowFunction<AdultData, AdultData, String, CustomWindow> {
+public class Release extends ProcessWindowFunction<AdultData, AdultData, String, UniqueUserWindow> {
     @Override
     public void process(String key, Context context, Iterable<AdultData> elements, Collector<AdultData> out) throws Exception {
         System.out.println("Releasing bucket! " + key);

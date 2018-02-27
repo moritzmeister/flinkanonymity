@@ -23,8 +23,7 @@ import org.apache.flink.streaming.api.windowing.triggers.TriggerResult;
 import org.apache.flink.streaming.api.windowing.windows.Window;
 import org.apache.flink.annotation.PublicEvolving;
 import org.apache.flink.annotation.VisibleForTesting;
-import org.apache.flink.streaming.api.windowing.windows.Window;
-import org.flinkanonymity.window.CustomWindow;
+import org.flinkanonymity.window.UniqueUserWindow;
 
 /**
  * A trigger that can turn any {@link Trigger} into a purging {@code Trigger}.
@@ -36,7 +35,7 @@ import org.flinkanonymity.window.CustomWindow;
  * @param <W> The type of {@link Window Windows} on which this trigger can operate.
  */
 @PublicEvolving
-public class CustomPurgingTrigger<T, W extends CustomWindow> extends Trigger<T, W> {
+public class CustomPurgingTrigger<T, W extends UniqueUserWindow> extends Trigger<T, W> {
     private static final long serialVersionUID = 1L;
 
     private Trigger<T, W> nestedTrigger;
@@ -88,7 +87,7 @@ public class CustomPurgingTrigger<T, W extends CustomWindow> extends Trigger<T, 
      *
      * @param nestedTrigger The trigger that is wrapped by this purging trigger
      */
-    public static <T, W extends CustomWindow> CustomPurgingTrigger<T, W> of(Trigger<T, W> nestedTrigger) {
+    public static <T, W extends UniqueUserWindow> CustomPurgingTrigger<T, W> of(Trigger<T, W> nestedTrigger) {
         return new CustomPurgingTrigger<>(nestedTrigger);
     }
 
