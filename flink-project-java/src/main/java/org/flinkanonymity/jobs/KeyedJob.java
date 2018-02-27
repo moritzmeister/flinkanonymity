@@ -5,6 +5,7 @@ import org.apache.flink.shaded.com.google.common.collect.Iterables;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.api.windowing.assigners.CustomAssigner;
 import org.apache.flink.streaming.api.windowing.assigners.GlobalWindows;
 import org.apache.flink.streaming.api.windowing.triggers.PurgingTrigger;
 import org.apache.flink.streaming.api.windowing.triggers.Trigger;
@@ -107,8 +108,8 @@ public class KeyedJob {
 
         DataStream<AdultData> output = tsGenData
                 .keyBy(new QidKey())
-                .window(GlobalWindows.create())
-                .trigger(PurgingTrigger.of(lDiversityTrigger.of(k, l)))
+                .window(CustomAssigner.create(k, l))
+                //.trigger(PurgingTrigger.of(lDiversityTrigger.of(k, l)))
                 .process(new Release());
 
         output.print();
