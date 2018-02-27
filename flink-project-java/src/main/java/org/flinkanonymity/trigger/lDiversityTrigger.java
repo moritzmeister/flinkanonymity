@@ -14,8 +14,9 @@ import org.apache.flink.api.common.state.ReducingStateDescriptor;
 import org.apache.flink.api.common.functions.ReduceFunction;
 
 import org.flinkanonymity.datatypes.AdultData;
+import org.flinkanonymity.window.CustomWindow;
 
-public class lDiversityTrigger<W extends Window> extends Trigger<Object, W> {
+public class lDiversityTrigger<W extends CustomWindow> extends Trigger<Object, W> {
 
     private final int l, k;
     private String sensitive = "sensitive_class";
@@ -34,7 +35,7 @@ public class lDiversityTrigger<W extends Window> extends Trigger<Object, W> {
         this.l = l;
     }
 
-    public static <W extends Window> lDiversityTrigger<W> of(int k, int l) {
+    public static <W extends CustomWindow> lDiversityTrigger<W> of(int k, int l) {
         return new lDiversityTrigger<>(k, l);
     }
 

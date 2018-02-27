@@ -6,8 +6,9 @@ import org.apache.flink.util.Collector;
 import org.apache.flink.shaded.com.google.common.collect.Iterables;
 
 import org.flinkanonymity.datatypes.AdultData;
+import org.flinkanonymity.window.CustomWindow;
 
-public class Release extends ProcessWindowFunction<AdultData, AdultData, String, GlobalWindow> {
+public class Release extends ProcessWindowFunction<AdultData, AdultData, String, CustomWindow> {
     @Override
     public void process(String key, Context context, Iterable<AdultData> elements, Collector<AdultData> out) throws Exception {
         System.out.println("Releasing bucket! " + key);

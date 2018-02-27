@@ -5,7 +5,6 @@ import org.apache.flink.shaded.com.google.common.collect.Iterables;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.windowing.assigners.CustomAssigner;
 import org.apache.flink.streaming.api.windowing.assigners.GlobalWindows;
 import org.apache.flink.streaming.api.windowing.triggers.PurgingTrigger;
 import org.apache.flink.streaming.api.windowing.triggers.Trigger;
@@ -36,6 +35,8 @@ import org.flinkanonymity.sources.AdultDataSource;
 import org.flinkanonymity.process.Release;
 import org.flinkanonymity.trigger.lDiversityTrigger;
 import org.flinkanonymity.process.ProcessTimestamp;
+import org.flinkanonymity.assigner.CustomAssigner;
+
 
 
 import java.util.HashMap;
@@ -109,8 +110,8 @@ public class KeyedJob {
         DataStream<AdultData> output = tsGenData
                 .keyBy(new QidKey())
                 .window(CustomAssigner.create(k, l))
-                //.trigger(PurgingTrigger.of(lDiversityTrigger.of(k, l)))
                 .process(new Release());
+        //.trigger(CustomPurgingTrigger.of(lDiversityTrigger.of(k, l)))
 
         output.print();
         output.writeAsText("../output/test.csv", org.apache.flink.core.fs.FileSystem.WriteMode.OVERWRITE).setParallelism(1);

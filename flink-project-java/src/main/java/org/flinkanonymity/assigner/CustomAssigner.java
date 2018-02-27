@@ -1,3 +1,5 @@
+package org.flinkanonymity.assigner;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -16,8 +18,9 @@
  * limitations under the License.
  */
 
-package org.apache.flink.streaming.api.windowing.assigners;
-
+import org.apache.flink.streaming.api.windowing.assigners.WindowAssigner;
+import org.flinkanonymity.trigger.CustomPurgingTrigger;
+import org.flinkanonymity.window.CustomWindow;
 import org.apache.flink.annotation.Internal;
 import org.apache.flink.annotation.PublicEvolving;
 import org.apache.flink.api.common.ExecutionConfig;
@@ -27,6 +30,8 @@ import org.apache.flink.streaming.api.windowing.triggers.PurgingTrigger;
 import org.apache.flink.streaming.api.windowing.triggers.Trigger;
 import org.apache.flink.streaming.api.windowing.triggers.TriggerResult;
 import org.apache.flink.streaming.api.windowing.windows.GlobalWindow;
+import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
+import org.apache.flink.streaming.api.windowing.windows.Window;
 import org.flinkanonymity.trigger.lDiversityTrigger;
 
 import java.util.Collection;
@@ -40,7 +45,7 @@ import java.util.Collections;
  * windows.
  */
 @PublicEvolving
-public class CustomAssigner extends WindowAssigner<Object, GlobalWindow> {
+public class CustomAssigner extends WindowAssigner<Object, CustomWindow> {
     private static final long serialVersionUID = 1L;
     private final int k;
     private final int l;
@@ -51,13 +56,15 @@ public class CustomAssigner extends WindowAssigner<Object, GlobalWindow> {
     }
 
     @Override
-    public Collection<GlobalWindow> assignWindows(Object element, long timestamp, WindowAssignerContext context) {
-        return Collections.singletonList(GlobalWindow.get());
+    public Collection<CustomWindow> assignWindows(Object element, long timestamp, WindowAssignerContext context) {
+        return Collections.singletonList(CustomWindow.get());
     }
 
     @Override
-    public Trigger<Object, GlobalWindow> getDefaultTrigger(StreamExecutionEnvironment env) {
-        return lDiversityTrigger.of(k, l);
+    public Trigger<Object, CustomWindow> getDefaultTrigger(StreamExecutionEnvironment env) {
+        //return CustomPurgingTrigger.of(lDiversityTrigger.of(k, l));
+        return CustomPurgingTrigger.of(lDiversityTrigger.of(k, l));
+
     }
 
     @Override
@@ -75,39 +82,10 @@ public class CustomAssigner extends WindowAssigner<Object, GlobalWindow> {
         return new CustomAssigner(k, l);
     }
 
-    /**
-     * A trigger that never fires, as default Trigger for GlobalWindows.
-     */
-    @Internal
-    public static class NeverTrigger extends Trigger<Object, GlobalWindow> {
-        private static final long serialVersionUID = 1L;
-
-        @Override
-        public TriggerResult onElement(Object element, long timestamp, GlobalWindow window, TriggerContext ctx) {
-            return TriggerResult.CONTINUE;
-        }
-
-        @Override
-        public TriggerResult onEventTime(long time, GlobalWindow window, TriggerContext ctx) {
-            return TriggerResult.CONTINUE;
-        }
-
-        @Override
-        public TriggerResult onProcessingTime(long time, GlobalWindow window, TriggerContext ctx) {
-            return TriggerResult.CONTINUE;
-        }
-
-        @Override
-        public void clear(GlobalWindow window, TriggerContext ctx) throws Exception {}
-
-        @Override
-        public void onMerge(GlobalWindow window, OnMergeContext ctx) {
-        }
-    }
 
     @Override
-    public TypeSerializer<GlobalWindow> getWindowSerializer(ExecutionConfig executionConfig) {
-        return new GlobalWindow.Serializer();
+    public TypeSerializer<CustomWindow> getWindowSerializer(ExecutionConfig executionConfig) {
+        return new CustomWindow.Serializer();
     }
 
     @Override

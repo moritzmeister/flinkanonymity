@@ -6,7 +6,7 @@ import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.windowing.assigners.GlobalWindows;
-import org.apache.flink.streaming.api.windowing.triggers.PurgingTrigger;
+import org.apache.flink.streaming.api.windowing.triggers.CustomPurgingTrigger;
 import org.apache.flink.streaming.api.windowing.triggers.Trigger;
 import org.apache.flink.streaming.api.windowing.triggers.TriggerResult;
 import org.apache.flink.api.common.functions.ReduceFunction;
@@ -23,7 +23,7 @@ import org.apache.flink.api.common.typeutils.base.IntSerializer;
 import org.apache.flink.api.common.typeutils.base.StringSerializer;
 import org.apache.flink.streaming.api.functions.windowing.WindowFunction;
 import org.apache.flink.streaming.api.windowing.windows.Window;
-import org.apache.flink.streaming.api.windowing.windows.GlobalWindow;
+import org.apache.flink.streaming.api.windowing.windows.CustomWindow;
 import org.apache.flink.util.OutputTag;
 import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -89,7 +89,7 @@ public class Evaluation {
                 .keyBy(new QidKey())
                 //.countWindow(k)
                 .window(GlobalWindows.create())
-                .trigger(PurgingTrigger.of(lDiversityTrigger.of(k, 4)))
+                .trigger(CustomPurgingTrigger.of(lDiversityTrigger.of(k, 4)))
                 .process(new Release());
 
         output.print();
