@@ -1,55 +1,53 @@
 package org.flinkanonymity.jobs;
 
 import org.apache.flink.api.java.utils.ParameterTool;
-import org.apache.flink.shaded.com.google.common.collect.Iterables;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.windowing.assigners.GlobalWindows;
-import org.apache.flink.streaming.api.windowing.triggers.PurgingTrigger;
-import org.apache.flink.streaming.api.windowing.triggers.Trigger;
-import org.apache.flink.streaming.api.windowing.triggers.TriggerResult;
-import org.apache.flink.api.common.functions.ReduceFunction;
-import org.apache.flink.api.common.state.ReducingState;
-import org.apache.flink.api.common.state.ReducingStateDescriptor;
-import org.apache.flink.util.Collector;
-import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.common.functions.MapFunction;
-import org.apache.flink.api.common.state.MapState;
-import org.apache.flink.api.common.state.MapStateDescriptor;
 import org.apache.flink.api.java.functions.KeySelector;
-import org.apache.flink.api.common.typeutils.base.LongSerializer;
-import org.apache.flink.api.common.typeutils.base.IntSerializer;
-import org.apache.flink.api.common.typeutils.base.StringSerializer;
-import org.apache.flink.streaming.api.functions.windowing.WindowFunction;
-import org.apache.flink.streaming.api.windowing.windows.Window;
-import org.apache.flink.streaming.api.windowing.windows.GlobalWindow;
-import org.apache.flink.util.OutputTag;
-import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 //import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction.Context;
-import org.apache.flink.api.java.tuple.Tuple2;
-import org.apache.flink.streaming.api.functions.ProcessFunction;
 
+import org.apache.flink.streaming.api.windowing.time.Time;
+import org.apache.flink.util.OutputTag;
+import org.flinkanonymity.assigner.MergingIdAssigner;
 import org.flinkanonymity.datatypes.*;
 import org.flinkanonymity.sources.AdultDataSource;
 import org.flinkanonymity.process.Release;
-import org.flinkanonymity.trigger.lDiversityTrigger;
 import org.flinkanonymity.process.ProcessTimestamp;
-import org.flinkanonymity.assigner.CustomAssigner;
-
 
 
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 public class KeyedJob {
     // Set up QID and Hashmap for global use.
     static QuasiIdentifier QID;
     static HashMap<String, Bucket> hashMap;
-    static int k = 10;
-    static int l = 5;
-    static int p = 1;
-    static int uniqueAdults = 15000;
-    static int streamLength = 20000;
+
+
+    /* Anonymity and Diversity Parameters */
+    private static int k = 10;
+    private static int l = 4;
+
+    /* Stream Parameters */
+    private static int parallelism = 1;
+
+    private static int uniqueAdults = 300;
+    private static int streamLength = 2000;
+    private static Time allowedLateness = Time.of(500, TimeUnit.MILLISECONDS);
+
+    private static OutputTag<AdultData> lateOutputTag = new OutputTag<AdultData>("late-data-not-anonymized"){};
+
+
+    /* -- Hierarchy Levels -- */
+    private static int ageHierarchy = 1;
+    private static int sexHierarchy = 0;
+    private static int raceHierarchy = 0;
+    private static int educHierarchy = 2;
+    private static int marstHierarchy = 0;
+    private static int countryHierarchy = 1;
+
 
 
     public static void main(String[] args) throws Exception {
@@ -71,23 +69,23 @@ public class KeyedJob {
         // String salary_hierarchy = "../sample-data/arx_adult/adult_hierarchy_salary-class.csv";
 
         // Initialize generalizations
-        Generalization age = new Generalization("age", age_hierarchy, 1);
-        Generalization sex = new Generalization("sex", sex_hierarchy, 0);
-        Generalization race = new Generalization("race", race_hierarchy, 0);
-        Generalization educ = new Generalization("educ", educ_hierarchy,2);
-        Generalization marst = new Generalization("marst", marst_hierarchy,0);
+        Generalization age = new Generalization("age", age_hierarchy, ageHierarchy);
+        Generalization sex = new Generalization("sex", sex_hierarchy, sexHierarchy);
+        Generalization race = new Generalization("race", race_hierarchy, raceHierarchy);
+        Generalization educ = new Generalization("educ", educ_hierarchy,educHierarchy);
+        Generalization marst = new Generalization("marst", marst_hierarchy,marstHierarchy);
+        Generalization country = new Generalization("country", country_hierarchy,countryHierarchy);
         //Generalization workclass = new Generalization("workclass", workclass_hierarchy,1);
-        Generalization country = new Generalization("country", country_hierarchy,1);
 
         // Initialize QuasiIdentifier
         QID = new QuasiIdentifier(age, sex, race, educ, marst, country);
 
         // Setting up Environment
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        env.setParallelism(p);
+        env.setParallelism(parallelism);
         env.setStreamTimeCharacteristic(TimeCharacteristic.IngestionTime);
 
-        DataStream<AdultData> data = env.addSource(new AdultDataSource(dataFilePath, streamLength, uniqueAdults));
+        DataStream<AdultData> data = env.addSource(new AdultDataSource(dataFilePath, uniqueAdults, streamLength));
 
 /* - Some manual calculations of timestamps
         DataStream<Tuple2<AdultData, Long>> tsGenData = genData
@@ -99,6 +97,7 @@ public class KeyedJob {
         // DataStream<AdultData> output = genData;
         // DataStreamSink<AdultData> output = new DataStreamSink<AdultData>();
 
+
         // Generalize Quasi Identifiers
         DataStream<AdultData> genData = data.map(new Generalize());
 
@@ -109,7 +108,9 @@ public class KeyedJob {
 
         DataStream<AdultData> output = tsGenData
                 .keyBy(new QidKey())
-                .window(CustomAssigner.create(k, l))
+                .window(new MergingIdAssigner(k, l))
+                //.allowedLateness(allowedLateness)
+                //.sideOutputLateData(lateOutputTag)
                 .process(new Release());
         //.trigger(CustomPurgingTrigger.of(lDiversityTrigger.of(k, l)))
 
