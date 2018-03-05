@@ -59,7 +59,7 @@ public class lDiversityTrigger<W extends IdWindow> extends Trigger<Object, W> {
         //diversityMap.put(sensitiveData, 1);
         sensValues.add(ad.getAttribute(this.sensitive));
 
-        System.out.println("TriggerResult method: Add tuple " + ad + " to window " + window);
+        System.out.println("TriggerResult method: Add tuple " + ad + " to window " + window + " " + ctx);
 
         /*
         if (count.get() >= this.k){
@@ -80,7 +80,7 @@ public class lDiversityTrigger<W extends IdWindow> extends Trigger<Object, W> {
                 sensValues.clear();
                 //count.clear();
                 System.out.println("Pulling trigger: " + window);
-                return TriggerResult.FIRE;
+                return TriggerResult.FIRE_AND_PURGE;
             }
         }
         return TriggerResult.CONTINUE;
@@ -118,15 +118,6 @@ public class lDiversityTrigger<W extends IdWindow> extends Trigger<Object, W> {
 
         @Override
         public String reduce(String value1, String value2) throws Exception {
-            /* This is checking the wrong thing...
-            ArrayList<String> a1 = new ArrayList<String>(Arrays.asList(value1.split(",")));
-            ArrayList<String> a2 = new ArrayList<String>(Arrays.asList(value2.split(",")));
-            for (String s: a1){
-                if (a2.contains(s)){
-                    throw new RuntimeException("Crash between " + a1 + " and " + a2);
-                }
-            }
-            */
             return value1 + "," + value2;
         }
 

@@ -232,7 +232,11 @@ public class IdWindow extends Window {
             } else {
                 // If the current merge DOES intersect with the candidate
                 System.out.println("NOT MERGING " + candidate + " with " + currentMerge.f0);
-                merged.add(currentMerge);
+                //merged.add(currentMerge);
+                if (currentMerge.f1.size() > 1) {
+                    System.out.println("c.merge(" + currentMerge.f1 + ", " + currentMerge.f0 + " called in else");
+                    c.merge(currentMerge.f1, currentMerge.f0);
+                }
                 currentMerge = new Tuple2<>();
                 currentMerge.f0 = candidate;
                 currentMerge.f1 = new HashSet<>();

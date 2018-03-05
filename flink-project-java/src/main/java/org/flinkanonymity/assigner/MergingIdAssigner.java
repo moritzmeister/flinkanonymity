@@ -55,7 +55,8 @@ public class MergingIdAssigner<T> extends MergingWindowAssigner<Object, IdWindow
     @SuppressWarnings("unchecked")
     @Override
     public Trigger<Object, IdWindow> getDefaultTrigger(StreamExecutionEnvironment env) {
-        return CustomPurgingTrigger.of(lDiversityTrigger.of(k, l));
+//        return CustomPurgingTrigger.of(lDiversityTrigger.of(k, l));
+        return lDiversityTrigger.of(k, l);
     }
 
     @Override
