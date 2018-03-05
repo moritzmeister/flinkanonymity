@@ -1,5 +1,5 @@
-
 package org.flinkanonymity.assigner;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,9 +18,11 @@ package org.flinkanonymity.assigner;
  * limitations under the License.
  */
 
+import org.apache.flink.streaming.api.windowing.assigners.MergingWindowAssigner;
 import org.apache.flink.streaming.api.windowing.assigners.WindowAssigner;
 import org.flinkanonymity.datatypes.AdultData;
 import org.flinkanonymity.trigger.CustomPurgingTrigger;
+import org.flinkanonymity.window.IdWindow;
 import org.flinkanonymity.window.UniqueUserWindow;
 import org.apache.flink.annotation.Internal;
 import org.apache.flink.annotation.PublicEvolving;
@@ -41,26 +43,25 @@ import java.util.Collections;
  * {@link org.apache.flink.streaming.api.windowing.evictors.Evictor} to do flexible, policy based
  * windows.
  */
-/*
 @PublicEvolving
-public class CustomAssigner extends WindowAssigner<Object, UniqueUserWindow> {
+public class IdAssigner extends WindowAssigner<Object, IdWindow> {
     private static final long serialVersionUID = 1L;
-    private final int k;
-    private final int l;
+    private int k;
+    private int l;
 
-    private CustomAssigner(int k, int l) {
+    private IdAssigner(int k, int l) {
         this.k = k;
         this.l = l;
     }
 
     @Override
-    public Collection<UniqueUserWindow> assignWindows(Object element, long timestamp, WindowAssignerContext context) {
+    public Collection<IdWindow> assignWindows(Object element, long timestamp, WindowAssignerContext context) {
         AdultData tuple = (AdultData)element;
-        return Collections.singletonList(UniqueUserWindow.get(tuple.id));
+        return Collections.singletonList(new IdWindow(tuple.id));
     }
 
     @Override
-    public Trigger<Object, UniqueUserWindow> getDefaultTrigger(StreamExecutionEnvironment env) {
+    public Trigger<Object, IdWindow> getDefaultTrigger(StreamExecutionEnvironment env) {
         //return CustomPurgingTrigger.of(lDiversityTrigger.of(k, l));
         return CustomPurgingTrigger.of(lDiversityTrigger.of(k, l));
 
@@ -71,15 +72,20 @@ public class CustomAssigner extends WindowAssigner<Object, UniqueUserWindow> {
         return "GlobalWindows()";
     }
 
-
+    /**
+     * Creates a new {@code GlobalWindows} {@link WindowAssigner} that assigns
+     * all elements to the same {@link GlobalWindow}.
+     *
+     * @return The global window policy.
+     */
     public static IdAssigner create(int k, int l) {
         return new IdAssigner(k, l);
     }
 
 
     @Override
-    public TypeSerializer<UniqueUserWindow> getWindowSerializer(ExecutionConfig executionConfig) {
-        return new UniqueUserWindow.Serializer();
+    public TypeSerializer<IdWindow> getWindowSerializer(ExecutionConfig executionConfig) {
+        return new IdWindow.Serializer();
     }
 
     @Override
@@ -87,4 +93,3 @@ public class CustomAssigner extends WindowAssigner<Object, UniqueUserWindow> {
         return false;
     }
 }
-*/

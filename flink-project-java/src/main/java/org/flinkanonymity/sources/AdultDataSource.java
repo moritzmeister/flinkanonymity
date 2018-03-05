@@ -59,7 +59,7 @@ public class AdultDataSource implements SourceFunction<AdultData> {
 
         while (reader.ready() && (line = reader.readLine()) != null) {
             // read first CensusData
-            //data = new AdultData(line);
+            // data = new AdultData(line);
             // idCount = data.id;
             frequencies = updateFrequencies(frequencies, line);
 
