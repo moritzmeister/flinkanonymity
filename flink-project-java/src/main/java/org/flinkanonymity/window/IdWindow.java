@@ -46,8 +46,6 @@ public class IdWindow extends Window {
         // Method used in the merge process
         for (Long l : other.ids) {
             if(this.ids.contains(l)) {
-                // Seems to be working
-                System.out.println("INTERSECTING WINDOWS: " + this.ids + " and " + other.ids);
                 return true;
             }
         }
@@ -64,26 +62,15 @@ public class IdWindow extends Window {
         Boolean fail = false;
 
         for (Long id: this.ids){
-            if (newids.contains(id)){
-                fail = true;
-            }
             newids.add(id);
         }
         for (Long id: other.ids){
-            if (newids.contains(id)){
-                fail = true;
-            }
             newids.add(id);
         }
         if(this.intersects(other)){
-            fail = true;
-        }
-
-        if(fail){
             throw new java.lang.Error("Merging intersectioning windows! ");
         }
 
-        System.out.println("IdWindow.merge() merged: " + this.ids + " and " + other.ids + " into " + newids);
         return new IdWindow(newids);
     }
 
@@ -199,14 +186,6 @@ public class IdWindow extends Window {
         }
     }
 
-    // ------------------------------------------------------------------------
-    //  Utilities
-    // ------------------------------------------------------------------------
-
-    /**
-     * Merge overlapping {@link IdWindow}s. For use by merging
-     * {@link org.apache.flink.streaming.api.windowing.assigners.WindowAssigner WindowAssigners}.
-     */
     public static void mergeWindows(Collection<IdWindow> windows, MergingWindowAssigner.MergeCallback<IdWindow> c) {
 
         /*
@@ -226,15 +205,11 @@ public class IdWindow extends Window {
                 currentMerge.f1.add(candidate);
             } else if (!currentMerge.f0.intersects(candidate)) {
                 // If the current merge does NOT intersect with the candidate
-                System.out.println("MERGING " + candidate + " with " + currentMerge.f0);
                 currentMerge.f0 = currentMerge.f0.merge(candidate);
                 currentMerge.f1.add(candidate);
             } else {
                 // If the current merge DOES intersect with the candidate
-                System.out.println("NOT MERGING " + candidate + " with " + currentMerge.f0);
-                //merged.add(currentMerge);
                 if (currentMerge.f1.size() > 1) {
-                    System.out.println("c.merge(" + currentMerge.f1 + ", " + currentMerge.f0 + " called in else");
                     c.merge(currentMerge.f1, currentMerge.f0);
                 }
                 currentMerge = new Tuple2<>();
@@ -250,7 +225,6 @@ public class IdWindow extends Window {
 
         for (Tuple2<IdWindow, Set<IdWindow>> m: merged) {
             if (m.f1.size() > 1) {
-                System.out.println("c.merge(" + m.f1 + ", " + m.f0);
                 c.merge(m.f1, m.f0);
             }
         }

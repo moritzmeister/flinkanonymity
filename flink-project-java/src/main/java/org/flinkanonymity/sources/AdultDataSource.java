@@ -58,23 +58,11 @@ public class AdultDataSource implements SourceFunction<AdultData> {
         }
 
         while (reader.ready() && (line = reader.readLine()) != null) {
-            // read first CensusData
-            // data = new AdultData(line);
-            // idCount = data.id;
             frequencies = updateFrequencies(frequencies, line);
-
-            // This would also be the place to implement timestamps and such fun..
-
-            // emit data
-            //System.out.println(data);
-            // sourceContext.collect(data);
-            // It is also possible to use collectWithTimestamp in order to handle timestamps:
-            // https://ci.apache.org/projects/flink/flink-docs-master/api/java/org/apache/flink/streaming/api/functions/source/SourceFunction.SourceContext.html
         }
 
         // Generate sample adultdata objects with same distribution as source data.
         for (int i = 0; i < streamLength; i++){
-            //idCount += 1L;
             long randId = (long)(Math.random()*uniqueAdults);
             line = createTuple(frequencies, (randId));
             data = new AdultData(line);

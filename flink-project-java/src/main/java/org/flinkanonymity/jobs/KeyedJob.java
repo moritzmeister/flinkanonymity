@@ -29,15 +29,11 @@ public class KeyedJob {
     /* Anonymity and Diversity Parameters */
     private static int k = 10;
     private static int l = 4;
+    private static int parallelism = 4;
 
     /* Stream Parameters */
-    private static int parallelism = 1;
-
     private static int uniqueAdults = 300;
-    private static int streamLength = 2000;
-    private static Time allowedLateness = Time.of(500, TimeUnit.MILLISECONDS);
-
-    private static OutputTag<AdultData> lateOutputTag = new OutputTag<AdultData>("late-data-not-anonymized"){};
+    private static int streamLength = 20000;
 
 
     /* -- Hierarchy Levels -- */
@@ -84,19 +80,7 @@ public class KeyedJob {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(parallelism);
         env.setStreamTimeCharacteristic(TimeCharacteristic.IngestionTime);
-
         DataStream<AdultData> data = env.addSource(new AdultDataSource(dataFilePath, uniqueAdults, streamLength));
-
-/* - Some manual calculations of timestamps
-        DataStream<Tuple2<AdultData, Long>> tsGenData = genData
-                .keyBy(new QidKey())
-                .process(new ProcessTimestamp());
-
-        tsGenData.print();
-*/
-        // DataStream<AdultData> output = genData;
-        // DataStreamSink<AdultData> output = new DataStreamSink<AdultData>();
-
 
         // Generalize Quasi Identifiers
         DataStream<AdultData> genData = data.map(new Generalize());
@@ -112,7 +96,6 @@ public class KeyedJob {
                 //.allowedLateness(allowedLateness)
                 //.sideOutputLateData(lateOutputTag)
                 .process(new Release());
-        //.trigger(CustomPurgingTrigger.of(lDiversityTrigger.of(k, l)))
 
         output.print();
         output.writeAsText("../output/test.csv", org.apache.flink.core.fs.FileSystem.WriteMode.OVERWRITE).setParallelism(1);
@@ -134,28 +117,4 @@ public class KeyedJob {
             return QID.generalize(adult);
         }
     }
-/*
-    public static class LDiversify implements FlatMapFunction<AdultData, AdultData>{
-        @Override
-        public void flatMap(AdultData tuple, Collector<AdultData> out) throws Exception {
-            // get bucket
-            String TupleQuasiString = tuple.QuasiToString(QID);
-            if (!hashMap.containsKey(TupleQuasiString)) { // If this bucket has never been reached before
-                hashMap.put(TupleQuasiString, new LBucket(TupleQuasiString)); // Create a bucket. Sensitive dataname could also be specified, default is sensitive_class.
-            }
-            LBucket lb = (LBucket) hashMap.get(TupleQuasiString); // Get the bucket
-            lb.add(tuple);
-
-            if (lb.isKAnonymous(k)) { // if bucket satisfies k-anonymity
-                if (lb.isLDiverse(l)){
-                    AdultData[] tuples = lb.dropBuffer(); // get tuples and drop bucket
-                    System.out.println("Releasing bucket! " + tuples[0].QuasiToString(QID));
-                    for (AdultData t : tuples) { // output tuples
-                        out.collect(t);
-                    }
-                }
-            }
-        }
-    }
-*/
 }

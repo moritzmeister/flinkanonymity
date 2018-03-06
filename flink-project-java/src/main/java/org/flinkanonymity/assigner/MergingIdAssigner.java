@@ -21,21 +21,7 @@ import org.flinkanonymity.window.IdWindow;
 import java.util.Collection;
 import java.util.Collections;
 
-/**
- * A {@link WindowAssigner} that windows elements into sessions based on the timestamp of the
- * elements. Windows cannot overlap.
- *
- * <p>For example, in order to window into windows with a dynamic time gap:
- * <pre> {@code
- * DataStream<Tuple2<String, Integer>> in = ...;
- * KeyedStream<String, Tuple2<String, Integer>> keyed = in.keyBy(...);
- * WindowedStream<Tuple2<String, Integer>, String, TimeWindows> windowed =
- *   keyed.window(DynamicEventTimeSessionWindows.withDynamicGap({@link SessionWindowTimeGapExtractor }));
- * } </pre>
- *
- * @param <T> The type of the input elements
- */
-@PublicEvolving
+
 public class MergingIdAssigner<T> extends MergingWindowAssigner<Object, IdWindow> {
     private static final long serialVersionUID = 1L;
     private int k;
@@ -55,7 +41,6 @@ public class MergingIdAssigner<T> extends MergingWindowAssigner<Object, IdWindow
     @SuppressWarnings("unchecked")
     @Override
     public Trigger<Object, IdWindow> getDefaultTrigger(StreamExecutionEnvironment env) {
-//        return CustomPurgingTrigger.of(lDiversityTrigger.of(k, l));
         return lDiversityTrigger.of(k, l);
     }
 
@@ -74,9 +59,7 @@ public class MergingIdAssigner<T> extends MergingWindowAssigner<Object, IdWindow
         return false;
     }
 
-    /**
-     * Merge overlapping {@link IdWindow}s.
-     */
+
     public void mergeWindows(Collection<IdWindow> windows, MergeCallback<IdWindow> c) {
         IdWindow.mergeWindows(windows, c);
     }
