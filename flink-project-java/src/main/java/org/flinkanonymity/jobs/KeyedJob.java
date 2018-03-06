@@ -8,17 +8,15 @@ import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.java.functions.KeySelector;
 //import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction.Context;
 
-import org.apache.flink.streaming.api.windowing.time.Time;
-import org.apache.flink.util.OutputTag;
-import org.flinkanonymity.assigner.MergingIdAssigner;
+import org.apache.flink.streaming.api.windowing.assigners.GlobalWindows;
 import org.flinkanonymity.datatypes.*;
 import org.flinkanonymity.sources.AdultDataSource;
 import org.flinkanonymity.process.Release;
 import org.flinkanonymity.process.ProcessTimestamp;
+import org.flinkanonymity.trigger.lDiversityTrigger;
 
 
 import java.util.HashMap;
-import java.util.concurrent.TimeUnit;
 
 public class KeyedJob {
     // Set up QID and Hashmap for global use.
@@ -92,9 +90,8 @@ public class KeyedJob {
 
         DataStream<AdultData> output = tsGenData
                 .keyBy(new QidKey())
-                .window(new MergingIdAssigner(k, l))
-                //.allowedLateness(allowedLateness)
-                //.sideOutputLateData(lateOutputTag)
+                .window(GlobalWindows.create())
+                .trigger(lDiversityTrigger.of(k, l))
                 .process(new Release());
 
         output.print();

@@ -7,12 +7,13 @@ import org.apache.flink.api.common.state.ReducingState;
 import org.apache.flink.api.common.state.ReducingStateDescriptor;
 import org.apache.flink.api.common.functions.ReduceFunction;
 
+import org.apache.flink.streaming.api.windowing.windows.GlobalWindow;
 import org.flinkanonymity.datatypes.AdultData;
 import org.flinkanonymity.window.IdWindow;
 
 import java.util.ArrayList;
 
-public class lDiversityTrigger<W extends IdWindow> extends Trigger<Object, W> {
+public class lDiversityTrigger<W extends GlobalWindow> extends Trigger<Object, W> {
 
     private final int l, k;
     private String sensitive = "sensitive_class";
@@ -25,7 +26,7 @@ public class lDiversityTrigger<W extends IdWindow> extends Trigger<Object, W> {
         this.l = l;
     }
 
-    public static <W extends IdWindow> lDiversityTrigger<W> of(int k, int l) {
+    public static <W extends GlobalWindow> lDiversityTrigger<W> of(int k, int l) {
         return new lDiversityTrigger<>(k, l);
     }
 

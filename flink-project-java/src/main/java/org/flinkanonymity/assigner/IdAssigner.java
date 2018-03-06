@@ -44,7 +44,7 @@ import java.util.Collections;
  * windows.
  */
 @PublicEvolving
-public class IdAssigner extends WindowAssigner<Object, IdWindow> {
+public class IdAssigner extends WindowAssigner<Object, GlobalWindow> {
     private static final long serialVersionUID = 1L;
     private int k;
     private int l;
@@ -55,15 +55,15 @@ public class IdAssigner extends WindowAssigner<Object, IdWindow> {
     }
 
     @Override
-    public Collection<IdWindow> assignWindows(Object element, long timestamp, WindowAssignerContext context) {
+    public Collection<GlobalWindow> assignWindows(Object element, long timestamp, WindowAssignerContext context) {
         AdultData tuple = (AdultData)element;
-        return Collections.singletonList(new IdWindow(tuple.id));
+        return Collections.singletonList(GlobalWindow.get());
     }
 
     @Override
-    public Trigger<Object, IdWindow> getDefaultTrigger(StreamExecutionEnvironment env) {
+    public Trigger<Object, GlobalWindow> getDefaultTrigger(StreamExecutionEnvironment env) {
         //return CustomPurgingTrigger.of(lDiversityTrigger.of(k, l));
-        return CustomPurgingTrigger.of(lDiversityTrigger.of(k, l));
+        return lDiversityTrigger.of(k, l);
 
     }
 
@@ -84,8 +84,8 @@ public class IdAssigner extends WindowAssigner<Object, IdWindow> {
 
 
     @Override
-    public TypeSerializer<IdWindow> getWindowSerializer(ExecutionConfig executionConfig) {
-        return new IdWindow.Serializer();
+    public TypeSerializer<GlobalWindow> getWindowSerializer(ExecutionConfig executionConfig) {
+        return new GlobalWindow.Serializer();
     }
 
     @Override
