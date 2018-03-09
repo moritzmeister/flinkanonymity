@@ -1,0 +1,31 @@
+/*
+        DataStream<AdultData> genData = data
+                .map(new Generalize())
+                .keyBy(new KeySelector<AdultData, String>() {
+                           public String getKey(AdultData tuple) {
+                               String TupleQuasiString = tuple.QuasiToString(QID);
+                               return TupleQuasiString;
+                           }
+                       });
+*/
+/*
+        KeyedStream<AdultData, String> keyedGenData = genData.keyBy(new KeySelector<AdultData, String>() {
+            public String getKey(AdultData tuple) {
+                String TupleQuasiString = tuple.QuasiToString(QID);
+                return TupleQuasiString;
+            }
+        });
+*/
+
+import org.apache.flink.api.java.operators.translation.PlanFilterOperator;
+import org.apache.flink.api.java.utils.ParameterTool;
+import org.apache.flink.streaming.api.TimeCharacteristic;
+import org.apache.flink.streaming.api.datastream.DataStream;
+import org.apache.flink.streaming.api.datastream.KeyedStream;
+import org.apache.flink.streaming.api.datastream.DataStreamSink;
+import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.api.functions.co.RichCoFlatMapFunction;
+import org.apache.flink.util.Collector;
+import org.apache.flink.api.common.functions.FlatMapFunction;
+import org.apache.flink.api.common.functions.MapFunction;
+import org.apache.flink.api.java.functions.KeySelector;

@@ -1,0 +1,23 @@
+Pseudo code algorithm
+
+Input: A stream T of tuples to be l-diversified, a set Q of q quasi-identifier attributes, a set S of s sensitive attributes, a set of g generalizations G, parameters k, l and p. 
+
+Output: A stream of l-diverse full-domain generalizations of T
+
+Initialization 
+
+
+When a tuple ti part of T arrives at instant i
+
+key by Quasi-Identifier values(?)
+
+
+put ti to map, use sensdata as key
+
+if entries in map > k:
+	if keys in map > l: 
+		release all tuples in map
+
+
+
+

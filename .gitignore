@@ -1,14 +1,29 @@
-flink-project/bin/
-flink-project/project/
-flink-project/target/
-flink-project/.cache
-flink-project/.classpath
-flink-project/.project
-flink-project/.settings
-sample-data/
-*.class
-*.iml
-*.ipr
-*.iws
+# Mac
+.DS_Store
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# Intellij
+# Scala project
 flink-project/.idea/
 flink-project/out
+flink-project/mainRunner/target/
+
+# Java
+flink-project-java/.idea/
+
+# General
+*.iml
+*.iws
+*.class
+*.ipr
+sample-data/
+output/
+
+# Maven
+flink-project-java/log/
+flink-project-java/target/
+
