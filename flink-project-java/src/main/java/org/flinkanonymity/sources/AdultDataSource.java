@@ -66,8 +66,9 @@ public class AdultDataSource implements SourceFunction<AdultData> {
 
         // Generate sample adultdata objects with same distribution as source data.
         for (int i = 0; i < streamLength; i++){
-            long randId = (long)(Math.random()*uniqueAdults);
-            line = createTuple(frequencies, (randId));
+            // long randId = (long)(Math.random()*uniqueAdults);
+            idCount += 1;
+            line = createTuple(frequencies, (idCount));
             data = new AdultData(line);
             data.setQID(QuasiID);
             sourceContext.collect(data);

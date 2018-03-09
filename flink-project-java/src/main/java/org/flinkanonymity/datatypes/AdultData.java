@@ -30,6 +30,8 @@ public class AdultData {
     public String sensitive_class;
     public Long ingTimestamp;
     public Long procTimestamp;
+    public Long latency = 0L;
+
 
     public QuasiIdentifier QID;
 
@@ -51,6 +53,8 @@ public class AdultData {
         this.sensitive_class = "";
         this.ingTimestamp = 0L;
         this.procTimestamp = 0L;
+        this.latency = 0L;
+
     }
 
     public AdultData(Long id, String sex, String age, String race, String marst, String educ, String country, String workclass,
@@ -70,6 +74,7 @@ public class AdultData {
         this.sensitive_class = sensitive_class;
         this.ingTimestamp = 0L;
         this.procTimestamp = 0L;
+        this.latency = 0L;
     }
 
     public AdultData(String line){
@@ -101,6 +106,7 @@ public class AdultData {
         this.salary = args[9];
         this.ingTimestamp = 0L;
         this.procTimestamp = 0L;
+        this.latency = 0L;
 
         if (this.age == null){
             throw new RuntimeException("Age is null! : " + line);
@@ -115,6 +121,7 @@ public class AdultData {
         //sets the timestamp
         if (attribute == "procTimestamp") {
             this.procTimestamp = value;
+            this.latency = this.procTimestamp - this.ingTimestamp;
         }
         else if (attribute == "ingTimestamp") {
             this.ingTimestamp = value;
@@ -247,7 +254,8 @@ public class AdultData {
         sb.append(sensitive).append(",");
         sb.append(sensitive_class).append(",");
         sb.append(ingTimestamp).append(",");
-        sb.append(procTimestamp);
+        sb.append(procTimestamp).append(",");
+        sb.append(latency);
         return sb.toString();
     }
 

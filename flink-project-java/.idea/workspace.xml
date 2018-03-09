@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d85a55ce-103a-4172-bd7c-231730056248" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../README.md" afterPath="$PROJECT_DIR$/../README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/flinkanonymity/datatypes/AdultData.java" afterPath="$PROJECT_DIR$/src/main/java/org/flinkanonymity/datatypes/AdultData.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/flinkanonymity/jobs/KeyedJob.java" afterPath="$PROJECT_DIR$/src/main/java/org/flinkanonymity/jobs/KeyedJob.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/flinkanonymity/sources/AdultDataSource.java" afterPath="$PROJECT_DIR$/src/main/java/org/flinkanonymity/sources/AdultDataSource.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../output/test.csv" afterPath="$PROJECT_DIR$/../output/test.csv" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -14,7 +18,38 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
+    <leaf>
+      <file leaf-file-name="AdultData.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/flinkanonymity/datatypes/AdultData.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="223">
+              <caret line="236" column="9" lean-forward="false" selection-start-line="236" selection-start-column="9" selection-end-line="236" selection-end-column="9" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AdultDataSource.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/flinkanonymity/sources/AdultDataSource.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="520">
+              <caret line="74" column="9" lean-forward="true" selection-start-line="74" selection-start-column="9" selection-end-line="74" selection-end-column="9" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="KeyedJob.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/flinkanonymity/jobs/KeyedJob.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="415">
+              <caret line="101" column="5" lean-forward="true" selection-start-line="101" selection-start-column="5" selection-end-line="101" selection-end-column="5" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -78,19 +113,19 @@
         <option value="$PROJECT_DIR$/src/main/java/org/flinkanonymity/datatypes/Bucket.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/flinkanonymity/datatypes/LBucket.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/flinkanonymity/triggers/LDiversityTrigger.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/flinkanonymity/datatypes/AdultData.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/flinkanonymity/jobs/Job.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/flinkanonymity/window/CustomWindow.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/flinkanonymity/window/UniqueUserWindow.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/flinkanonymity/trigger/CustomPurgingTrigger.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/flinkanonymity/assigner/CustomAssigner.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/flinkanonymity/sources/AdultDataSource.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/flinkanonymity/window/IdWindow.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/flinkanonymity/jobs/KeyedJob.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/flinkanonymity/trigger/lDiversityTrigger.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/flinkanonymity/process/Release.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/flinkanonymity/assigner/IdAssigner.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/flinkanonymity/assigner/MergingIdAssigner.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/flinkanonymity/sources/AdultDataSource.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/flinkanonymity/jobs/KeyedJob.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/flinkanonymity/datatypes/AdultData.java" />
       </list>
     </option>
   </component>
@@ -106,7 +141,7 @@
       <select />
     </treeState>
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="1">
     <option name="y" value="24" />
     <option name="width" value="1230" />
     <option name="height" value="830" />
@@ -127,6 +162,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -139,14 +175,73 @@
               <item name="flink-project-java" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="flink-project-java" type="b2602c69:ProjectViewProjectNode" />
+              <item name="flink-project-java" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="flink-project-java" type="b2602c69:ProjectViewProjectNode" />
+              <item name="flink-project-java" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="flink-project-java" type="b2602c69:ProjectViewProjectNode" />
+              <item name="flink-project-java" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="org" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="flink-project-java" type="b2602c69:ProjectViewProjectNode" />
+              <item name="flink-project-java" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="org" type="462c0819:PsiDirectoryNode" />
+              <item name="flinkanonymity" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="flink-project-java" type="b2602c69:ProjectViewProjectNode" />
+              <item name="flink-project-java" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="org" type="462c0819:PsiDirectoryNode" />
+              <item name="flinkanonymity" type="462c0819:PsiDirectoryNode" />
+              <item name="datatypes" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="flink-project-java" type="b2602c69:ProjectViewProjectNode" />
+              <item name="flink-project-java" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="org" type="462c0819:PsiDirectoryNode" />
+              <item name="flinkanonymity" type="462c0819:PsiDirectoryNode" />
+              <item name="jobs" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="flink-project-java" type="b2602c69:ProjectViewProjectNode" />
+              <item name="flink-project-java" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="org" type="462c0819:PsiDirectoryNode" />
+              <item name="flinkanonymity" type="462c0819:PsiDirectoryNode" />
+              <item name="sources" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
-      <pane id="AndroidView" />
-      <pane id="Scope" />
       <pane id="Scratches" />
+      <pane id="AndroidView" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -350,14 +445,16 @@
       <workItem from="1519245370320" duration="10490000" />
       <workItem from="1519408864453" duration="59586000" />
       <workItem from="1520178649146" duration="13226000" />
+      <workItem from="1520593044594" duration="3040000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="156067000" />
+    <option name="totallyTimeSpent" value="159118000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="24" width="1230" height="830" extended-state="0" />
+    <frame x="0" y="24" width="1230" height="830" extended-state="1" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
@@ -368,12 +465,12 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.43809524" sideWeight="0.513468" order="0" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3293919" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.30204082" sideWeight="0.63720536" order="5" side_tool="false" content_ui="tabs" x="231" y="337" width="1188" height="201" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20816326" sideWeight="0.63720536" order="5" side_tool="false" content_ui="tabs" x="231" y="337" width="1188" height="201" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18097644" sideWeight="0.5" order="4" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18350169" sideWeight="0.5" order="4" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -437,8 +534,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/flinkanonymity/jobs/Job.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/flinkanonymity/sources/CensusDataSource.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/org/flinkanonymity/datatypes/CensusData.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/org/flinkanonymity/jobs/Job.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/org/flinkanonymity/sources/CensusDataSource.java" />
@@ -461,14 +556,7 @@
     <entry file="file://$PROJECT_DIR$/../sample-data/arx_adult/adult_subset.csv" />
     <entry file="file://$PROJECT_DIR$/../sample-data/arx_adult/adult_subset_sensitive.csv" />
     <entry file="file://$PROJECT_DIR$/src/main/java/org/flinkanonymity/triggers/LDiversityTrigger.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/flinkanonymity/datatypes/LBucket.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="6" column="13" lean-forward="false" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/flinkanonymity/datatypes/LBucket.java" />
     <entry file="jar://$MAVEN_REPOSITORY$/org/apache/flink/flink-streaming-java_2.10/1.3.0/flink-streaming-java_2.10-1.3.0.jar!/org/apache/flink/streaming/api/operators/StreamSource.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-462">
@@ -476,14 +564,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-767">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml" />
     <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_121.jdk/Contents/Home/src.zip!/java/util/HashMap.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="162">
@@ -499,36 +580,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/flinkanonymity/jobs/Job.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="146">
-          <caret line="24" column="22" lean-forward="false" selection-start-line="24" selection-start-column="22" selection-end-line="24" selection-end-column="22" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/flinkanonymity/datatypes/Generalization.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="7" column="13" lean-forward="false" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/flinkanonymity/datatypes/QuasiIdentifier.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="41" lean-forward="false" selection-start-line="8" selection-start-column="27" selection-end-line="8" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/flinkanonymity/jobs/KeyedJob.java.orig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/flinkanonymity/jobs/Job.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/flinkanonymity/datatypes/Generalization.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/flinkanonymity/datatypes/QuasiIdentifier.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/flinkanonymity/jobs/KeyedJob.java.orig" />
     <entry file="file://$PROJECT_DIR$/src/main/java/org/flinkanonymity/trigger/CustomPurgingAssigner.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/org/flinkanonymity/window/CustomWindow.java" />
     <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_121.jdk/Contents/Home/src.zip!/java/util/ArrayList.java">
@@ -553,27 +608,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/flinkanonymity/assigner/CustomAssigner.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1200">
-          <caret line="80" column="18" lean-forward="false" selection-start-line="80" selection-start-column="18" selection-end-line="80" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/flinkanonymity/assigner/CustomAssigner.java" />
     <entry file="jar://$MAVEN_REPOSITORY$/org/apache/flink/flink-streaming-java_2.10/1.3.0/flink-streaming-java_2.10-1.3.0.jar!/org/apache/flink/streaming/runtime/operators/windowing/WindowOperator.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1710">
           <caret line="181" column="78" lean-forward="false" selection-start-line="181" selection-start-column="67" selection-end-line="181" selection-end-column="78" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/flinkanonymity/datatypes/AdultData.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="304">
-          <caret line="96" column="19" lean-forward="false" selection-start-line="96" selection-start-column="13" selection-end-line="96" selection-end-column="19" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -581,78 +620,52 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="47">
           <caret line="38" column="0" lean-forward="false" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/flinkanonymity/trigger/CustomPurgingTrigger.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/flinkanonymity/window/UniqueUserWindow.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/flinkanonymity/window/IdWindow.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/flinkanonymity/process/Release.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/flinkanonymity/assigner/IdAssigner.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/flinkanonymity/assigner/MergingIdAssigner.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/flinkanonymity/trigger/lDiversityTrigger.java" />
+    <entry file="file://$PROJECT_DIR$/quickstart.iml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/flinkanonymity/trigger/CustomPurgingTrigger.java">
+    <entry file="file://$PROJECT_DIR$/src/main/main.iml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="570">
-          <caret line="46" column="0" lean-forward="true" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/flinkanonymity/window/UniqueUserWindow.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="113">
-          <caret line="20" column="29" lean-forward="false" selection-start-line="20" selection-start-column="13" selection-end-line="20" selection-end-column="29" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/flinkanonymity/window/IdWindow.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="137">
-          <caret line="28" column="39" lean-forward="true" selection-start-line="28" selection-start-column="39" selection-end-line="28" selection-end-column="39" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/flinkanonymity/process/Release.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="27" column="0" lean-forward="true" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/flinkanonymity/jobs/KeyedJob.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="82">
-          <caret line="29" column="38" lean-forward="true" selection-start-line="29" selection-start-column="38" selection-end-line="29" selection-end-column="38" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/flinkanonymity/assigner/IdAssigner.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="553">
-          <caret line="89" column="0" lean-forward="true" selection-start-line="89" selection-start-column="0" selection-end-line="89" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/flinkanonymity/assigner/MergingIdAssigner.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="244">
-          <caret line="34" column="13" lean-forward="true" selection-start-line="34" selection-start-column="13" selection-end-line="34" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/flinkanonymity/trigger/lDiversityTrigger.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="298">
-          <caret line="77" column="37" lean-forward="false" selection-start-line="77" selection-start-column="37" selection-end-line="77" selection-end-column="37" />
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/flinkanonymity/sources/AdultDataSource.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="780">
-          <caret line="63" column="28" lean-forward="false" selection-start-line="63" selection-start-column="0" selection-end-line="64" selection-end-column="0" />
+        <state relative-caret-position="520">
+          <caret line="74" column="9" lean-forward="true" selection-start-line="74" selection-start-column="9" selection-end-line="74" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/flinkanonymity/jobs/KeyedJob.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="415">
+          <caret line="101" column="5" lean-forward="true" selection-start-line="101" selection-start-column="5" selection-end-line="101" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/flinkanonymity/datatypes/AdultData.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="223">
+          <caret line="236" column="9" lean-forward="false" selection-start-line="236" selection-start-column="9" selection-end-line="236" selection-end-column="9" />
           <folding />
         </state>
       </provider>

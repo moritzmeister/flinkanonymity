@@ -96,7 +96,8 @@ public class KeyedJob {
                 .process(new Release());
 
         output.print();
-        output.writeAsText("../output/test.csv", org.apache.flink.core.fs.FileSystem.WriteMode.OVERWRITE).setParallelism(1); // setParalellism(1) yields ONE output file.
+        String filename = "output-n_" + streamLength + "k_" + k + "l_" + l + "p_" + parallelism + ".csv";
+        output.writeAsText("../output/" + filename, org.apache.flink.core.fs.FileSystem.WriteMode.OVERWRITE).setParallelism(1); // setParalellism(1) yields ONE output file.
         env.execute();
     }
 }
