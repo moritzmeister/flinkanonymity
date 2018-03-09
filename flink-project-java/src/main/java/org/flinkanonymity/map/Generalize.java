@@ -1,11 +1,12 @@
 package org.flinkanonymity.map;
 
+import org.apache.flink.api.common.functions.MapFunction;
+
 import org.flinkanonymity.datatypes.AdultData;
-/*
-public static class Generalize implements MapFunction<AdultData, AdultData>{
+
+public class Generalize implements MapFunction<AdultData, AdultData>{
     @Override
     public AdultData map(AdultData adult) throws Exception{
-        return QID.generalize(adult);
+        return adult.QID.generalize(adult);
     }
 }
-*/

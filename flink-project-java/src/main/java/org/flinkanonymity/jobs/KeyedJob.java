@@ -14,6 +14,7 @@ import org.flinkanonymity.sources.AdultDataSource;
 import org.flinkanonymity.process.Release;
 import org.flinkanonymity.process.ProcessTimestamp;
 import org.flinkanonymity.trigger.lDiversityTrigger;
+import org.flinkanonymity.map.Generalize;
 
 
 import java.util.HashMap;
@@ -22,7 +23,6 @@ public class KeyedJob {
     // Set up QID and Hashmap for global use.
     static QuasiIdentifier QID;
     static HashMap<String, Bucket> hashMap;
-
 
     /* Anonymity and Diversity Parameters */
     private static int k = 10;
@@ -73,12 +73,15 @@ public class KeyedJob {
 
         // Initialize QuasiIdentifier
         QID = new QuasiIdentifier(age, sex, race, educ, marst, country);
+        // two ways of doing this, either this way, however then QID needs to be serializable for some reason
+        // or implement the QID as an attribute in the AdultData datatype and set it during construction in the data source
+        // second one is probably the way to go
 
         // Setting up Environment
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(parallelism);
         env.setStreamTimeCharacteristic(TimeCharacteristic.IngestionTime);
-        DataStream<AdultData> data = env.addSource(new AdultDataSource(dataFilePath, uniqueAdults, streamLength));
+        DataStream<AdultData> data = env.addSource(new AdultDataSource(dataFilePath, uniqueAdults, streamLength, QID));
 
         // Generalize Quasi Identifiers
         DataStream<AdultData> genData = data.map(new Generalize());
@@ -114,4 +117,5 @@ public class KeyedJob {
             return QID.generalize(adult);
         }
     }
+    */
 }

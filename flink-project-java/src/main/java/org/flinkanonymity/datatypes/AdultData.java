@@ -1,5 +1,7 @@
 package org.flinkanonymity.datatypes;
 
+import org.flinkanonymity.datatypes.QuasiIdentifier;
+
 public class AdultData {
 /**
  * AdultData
@@ -28,6 +30,8 @@ public class AdultData {
     public String sensitive_class;
     public Long ingTimestamp;
     public Long procTimestamp;
+
+    public QuasiIdentifier QID;
 
     public int uniqueAdults = 5000;
 
@@ -101,6 +105,10 @@ public class AdultData {
         if (this.age == null){
             throw new RuntimeException("Age is null! : " + line);
         }
+    }
+
+    public void setQID(QuasiIdentifier qid) {
+        this.QID = qid;
     }
 
     public void setTimestamp(String attribute, Long value) {

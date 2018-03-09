@@ -6,6 +6,7 @@ import  org.flinkanonymity.datatypes.AdultData;
 
 // Flink
 import org.apache.flink.streaming.api.functions.source.SourceFunction;
+import org.flinkanonymity.datatypes.QuasiIdentifier;
 
 // Java
 import java.io.*;
@@ -22,12 +23,14 @@ public class AdultDataSource implements SourceFunction<AdultData> {
     private transient InputStream fileStream;
     private int streamLength;
     private int uniqueAdults;
+    private final QuasiIdentifier QuasiID;
 
 
-    public AdultDataSource(String dataFilePath, int uniqueAdults, int streamLength) {
+    public AdultDataSource(String dataFilePath, int uniqueAdults, int streamLength, QuasiIdentifier qid) {
         this.dataFilePath = dataFilePath;
         this.uniqueAdults = uniqueAdults;
         this.streamLength = streamLength;
+        this.QuasiID = qid;
     }
 
     @Override
@@ -66,6 +69,7 @@ public class AdultDataSource implements SourceFunction<AdultData> {
             long randId = (long)(Math.random()*uniqueAdults);
             line = createTuple(frequencies, (randId));
             data = new AdultData(line);
+            data.setQID(QuasiID);
             sourceContext.collect(data);
         }
     }

@@ -63,7 +63,7 @@ public class Job {
         env.setParallelism(1);
         env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
 
-        DataStream<AdultData> data = env.addSource(new AdultDataSource(dataFilePath, streamLength, uniqueAdults));
+        DataStream<AdultData> data = env.addSource(new AdultDataSource(dataFilePath, streamLength, uniqueAdults, QID));
 
         // DataStreamSink<AdultData> output = new DataStreamSink<AdultData>();
         // output.setParallelism(1);
