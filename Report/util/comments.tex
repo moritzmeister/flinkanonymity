@@ -1,0 +1,10 @@
+% TODO: Remove on final doc
+\RequirePackage[textsize=scriptsize,color=blue!20]{todonotes}
+\newcounter{comment}
+\newcommand{\comment}[2][]{%
+% initials of the author (optional) + note in the margin
+\refstepcounter{comment}%
+{%
+\todo{\textbf{Comment [#1\thecomment]:}~#2}%
+}}
+% END TODO
