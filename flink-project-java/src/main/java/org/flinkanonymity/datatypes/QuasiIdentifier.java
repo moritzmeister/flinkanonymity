@@ -1,10 +1,12 @@
 package org.flinkanonymity.datatypes;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class QuasiIdentifier {
+public class QuasiIdentifier implements Serializable{
 
     public ArrayList<Generalization> qid = new ArrayList<Generalization>();
+
 
     public QuasiIdentifier(Generalization... args) {
         /* Constructs a Quasi Identifier from several Generalizations */

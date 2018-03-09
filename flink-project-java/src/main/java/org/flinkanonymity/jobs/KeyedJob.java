@@ -10,6 +10,7 @@ import org.apache.flink.api.java.functions.KeySelector;
 
 import org.apache.flink.streaming.api.windowing.assigners.GlobalWindows;
 import org.flinkanonymity.datatypes.*;
+import org.flinkanonymity.keyselector.QidKey;
 import org.flinkanonymity.sources.AdultDataSource;
 import org.flinkanonymity.process.Release;
 import org.flinkanonymity.process.ProcessTimestamp;
@@ -73,9 +74,6 @@ public class KeyedJob {
 
         // Initialize QuasiIdentifier
         QID = new QuasiIdentifier(age, sex, race, educ, marst, country);
-        // two ways of doing this, either this way, however then QID needs to be serializable for some reason
-        // or implement the QID as an attribute in the AdultData datatype and set it during construction in the data source
-        // second one is probably the way to go
 
         // Setting up Environment
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
@@ -98,24 +96,7 @@ public class KeyedJob {
                 .process(new Release());
 
         output.print();
-        output.writeAsText("../output/test.csv", org.apache.flink.core.fs.FileSystem.WriteMode.OVERWRITE).setParallelism(1);
+        output.writeAsText("../output/test.csv", org.apache.flink.core.fs.FileSystem.WriteMode.OVERWRITE).setParallelism(1); // setParalellism(1) yields ONE output file.
         env.execute();
     }
-
-    public static class QidKey implements KeySelector<AdultData, String> {
-        @Override
-        public String getKey(AdultData tuple) {
-            String TupleQuasiString = tuple.QuasiToString(QID);
-            return TupleQuasiString;
-        }
-    }
-
-    public static class Generalize implements MapFunction<AdultData, AdultData>{
-        @Override
-        public AdultData map(AdultData adult) throws Exception{
-            // Use arx to generalize
-            return QID.generalize(adult);
-        }
-    }
-    */
 }

@@ -3,9 +3,10 @@ package org.flinkanonymity.datatypes;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.HashMap;
 
-public class Generalization {
+public class Generalization implements Serializable{
 
     public String attr;
     public String dataFilePath;
@@ -13,7 +14,7 @@ public class Generalization {
     private HashMap<String, String> hierarchy = new HashMap<String, String>();
 
     public Generalization(){
-        throw new RuntimeException("Attribute needs to be specified for generalization");
+        /*throw new RuntimeException("Attribute needs to be specified for generalization")*/;
     }
 
     public Generalization(String attribute){
