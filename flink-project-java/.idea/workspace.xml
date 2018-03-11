@@ -2,11 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d85a55ce-103a-4172-bd7c-231730056248" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/flinkanonymity/datatypes/AdultData.java" afterPath="$PROJECT_DIR$/src/main/java/org/flinkanonymity/datatypes/AdultData.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/flinkanonymity/jobs/KeyedJob.java" afterPath="$PROJECT_DIR$/src/main/java/org/flinkanonymity/jobs/KeyedJob.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/flinkanonymity/sources/AdultDataSource.java" afterPath="$PROJECT_DIR$/src/main/java/org/flinkanonymity/sources/AdultDataSource.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../output/test.csv" afterPath="$PROJECT_DIR$/../output/test.csv" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../notebooks/.ipynb_checkpoints/003_StuckTuples-checkpoint.ipynb" afterPath="$PROJECT_DIR$/../notebooks/.ipynb_checkpoints/003_StuckTuples-checkpoint.ipynb" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../notebooks/002_OutputAnalysis.ipynb" afterPath="$PROJECT_DIR$/../notebooks/002_OutputAnalysis.ipynb" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../notebooks/003_StuckTuples.ipynb" afterPath="$PROJECT_DIR$/../notebooks/003_StuckTuples.ipynb" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -19,11 +18,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="AdultData.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="AdultData.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/org/flinkanonymity/datatypes/AdultData.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="223">
               <caret line="236" column="9" lean-forward="false" selection-start-line="236" selection-start-column="9" selection-end-line="236" selection-end-column="9" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Generalization.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/flinkanonymity/datatypes/Generalization.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="60">
+              <caret line="8" column="13" lean-forward="false" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
               <folding />
             </state>
           </provider>
@@ -39,11 +48,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="KeyedJob.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="KeyedJob.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/org/flinkanonymity/jobs/KeyedJob.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="415">
-              <caret line="101" column="5" lean-forward="true" selection-start-line="101" selection-start-column="5" selection-end-line="101" selection-end-column="5" />
+            <state relative-caret-position="321">
+              <caret line="88" column="55" lean-forward="false" selection-start-line="88" selection-start-column="55" selection-end-line="88" selection-end-column="55" />
               <folding />
             </state>
           </provider>
@@ -124,8 +133,8 @@
         <option value="$PROJECT_DIR$/src/main/java/org/flinkanonymity/assigner/IdAssigner.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/flinkanonymity/assigner/MergingIdAssigner.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/flinkanonymity/sources/AdultDataSource.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/flinkanonymity/jobs/KeyedJob.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/flinkanonymity/datatypes/AdultData.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/flinkanonymity/jobs/KeyedJob.java" />
       </list>
     </option>
   </component>
@@ -141,8 +150,9 @@
       <select />
     </treeState>
   </component>
-  <component name="ProjectFrameBounds" extendedState="1">
-    <option name="y" value="24" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="205" />
+    <option name="y" value="23" />
     <option name="width" value="1230" />
     <option name="height" value="830" />
   </component>
@@ -445,15 +455,15 @@
       <workItem from="1519245370320" duration="10490000" />
       <workItem from="1519408864453" duration="59586000" />
       <workItem from="1520178649146" duration="13226000" />
-      <workItem from="1520593044594" duration="3040000" />
+      <workItem from="1520593044594" duration="12611000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="159118000" />
+    <option name="totallyTimeSpent" value="168689000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="24" width="1230" height="830" extended-state="1" />
+    <frame x="205" y="23" width="1230" height="830" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -465,7 +475,7 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.43809524" sideWeight="0.513468" order="0" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3293919" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20816326" sideWeight="0.63720536" order="5" side_tool="false" content_ui="tabs" x="231" y="337" width="1188" height="201" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2952381" sideWeight="0.63720536" order="5" side_tool="false" content_ui="tabs" x="231" y="337" width="1188" height="201" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -581,7 +591,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/flinkanonymity/jobs/Job.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/flinkanonymity/datatypes/Generalization.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/org/flinkanonymity/datatypes/QuasiIdentifier.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/org/flinkanonymity/jobs/KeyedJob.java.orig" />
     <entry file="file://$PROJECT_DIR$/src/main/java/org/flinkanonymity/trigger/CustomPurgingAssigner.java" />
@@ -654,18 +663,26 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/flinkanonymity/jobs/KeyedJob.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="415">
-          <caret line="101" column="5" lean-forward="true" selection-start-line="101" selection-start-column="5" selection-end-line="101" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/flinkanonymity/datatypes/AdultData.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="223">
           <caret line="236" column="9" lean-forward="false" selection-start-line="236" selection-start-column="9" selection-end-line="236" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/flinkanonymity/datatypes/Generalization.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="8" column="13" lean-forward="false" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/flinkanonymity/jobs/KeyedJob.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="321">
+          <caret line="88" column="55" lean-forward="false" selection-start-line="88" selection-start-column="55" selection-end-line="88" selection-end-column="55" />
           <folding />
         </state>
       </provider>
