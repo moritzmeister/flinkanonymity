@@ -5,6 +5,9 @@ This is a research project developed by [Moritz Meister](https://github.com/mori
 ## About
 The aim of the research project is to investigate the potential in using Apache Flink's strengths of parallelizing data streams, in order to anonymize streamed data according to the [K-Anonymity](https://en.wikipedia.org/wiki/K-anonymity) and [L-Diversity](https://en.wikipedia.org/wiki/L-diversity) models.  
 
+## Report
+Find the working document of the final report [here] (https://www.sharelatex.com/read/yddnznfsmsks). 
+
 ## Approach
 
 
