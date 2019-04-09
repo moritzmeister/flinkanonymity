@@ -25,8 +25,8 @@
 
 \pagestyle{fancy}
 \fancyhf{}
-\lhead{\color{Gray}{\small{Travlendar+ project by Philip Claesson, Miguel Maricalva, Moritz Meister}}}
-\lfoot{\textcolor{Gray}{\small{Copyright © 2017, Philip Claesson, Miguel Maricalva, Moritz Meister – All rights reserved}}}
+\lhead{\color{Gray}{\small{Research project by Philip Claesson, Moritz Meister}}}
+\lfoot{\textcolor{Gray}{\small{Copyright © 2018, Philip Claesson, Moritz Meister – All rights reserved}}}
 \rfoot{\textcolor{Gray}{\thepage}}
 \renewcommand{\headrulewidth}{0pt}
 
@@ -124,6 +124,7 @@
 \usepackage{enumitem}
 \usepackage{amssymb}
 \usepackage{amsmath}
+\usepackage{amsthm}
 \usepackage{algorithm}
 \usepackage[noend]{algpseudocode}
 \usepackage{listings}             % Include the listings-package
@@ -132,12 +133,13 @@
 %\newcommand{\comment}[1]{{\color{Red}$\blacktriangleright$ Comment: #1 $\blacktriangleleft$}}
 \setlist[description]{leftmargin=\parindent,labelindent=\parindent}
 
-\usepackage{float}
-
 % Some utilities\ldots
 \input{util/highlight}
 \input{util/abbrev}
 
-
-
 \date{}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{example}{Example}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}

@@ -1,1 +1,99 @@
-little literature overview, why they not work in the case of streaming
+\subsection{Static data sets}
+
+\noindent The possibility to de-anonymise data was introduced and demonstrated by \citeA{sweeney2000}. In the study, Sweeney used public 1990 U.S. Census summary data to investigate the potential of identifying unique individuals. It was found that 87\% of the population in the United States had reported characteristics that likely made them unique based on the quasi-identifier attributes 5-digit ZIP2, gender, date of birth \cite{sweeney2000}. 
+\\
+In order to develop a method to protect released data against re-identification attacks, \citeA{kanonymity2002} introduced the method \textit{k-anonymity}:
+
+\begin{definition}[$k$-Anonymity]
+Let RT$(A_1,...,A_n)$ be a table of $n$ attributes and $QID_{RT}$ be the quasi-identifier associated with it, that is, a subset of the attrib. RT is said to satisfy $k$-anonyutesmity if and only if each sequence of values in RT[$QID_{RT}$] appears with at least $k$ occurrences in RT[$QID_{RT}$]. \cite{kanonymity2002}
+\end{definition}
+\\
+\noindent The quasi-identifier $QID_{RT}$ is the minimal set of attributes $QID_{RT} \subset (A_1,...,A_n)$ that can be used in an re-identification attack to join the data with external information in order to uniquely identify individuals. That means that $k$-Anonymity guarantees privacy protection by making each combination of values of the quasi-identifier indistinguishable from at least $k-1$ other individuals. In traditional database domains, $k$-Anonymity has been proved efficient for privacy protection \cite{li2008}.\\
+
+\begin{example}[3-Anonymization] \label{3ano}
+Let us consider an example for the QID \{postcode, occupation, age\} and sensitive attribute \{income\}:
+\begin{table}[H]
+\centering
+\begin{tabular}{@{}llll@{}}
+\toprule
+postcode & occupation             & age & income \\ \midrule
+10230    & high school teacher    & 32  & 65 k   \\
+21032    & physician              & 42  & 95 k   \\
+21030    & dentist                & 40  & 110 k  \\
+10210    & primary school teacher & 38  & 58 k   \\
+21030    & surgeon                & 46  & 150 k  \\
+10285    & sessional instructor   & 28  & 42 k   \\ \bottomrule
+\end{tabular}
+\caption{Table T of micro data}
+\label{vulnerableData}
+\end{table}
+\noindent The following generalization of the table is 3-anonymous and therefore an attacker with  background information can't reliably identify the individuals:
+\begin{table}[H]
+\centering
+\begin{tabular}{@{}llll@{}}
+\toprule
+postcode & occupation     & age       & income \\ \midrule
+102**    & teacher        & (27-38{]} & 65 k   \\
+2103*    & medical doctor & (38-46{]} & 95 k   \\
+2103*    & medical doctor & (38-46{]} & 110 k  \\
+102**    & teacher        & (27-38{]} & 58 k   \\
+2103*    & medical doctor & (38-46{]} & 150 k  \\
+102**    & teacher        & (27-38{]} & 42 k   \\ \bottomrule
+\end{tabular}
+\caption{3-anonymous Table T' on QID}
+\label{genData}
+\end{table}
+
+\end{example}
+
+\noindent In order to achieve $k$-Anonymity, generalization needs to be used. As can be seen from example \ref{3ano}, this is, the process of replacing values by a more general value, for example by an interval, shortening the value, a more general description or in the worst case it might be necessary to completely suppress the value and replace it entirely by an asterisk. \\
+\\
+Even though \citeA{kanonymity2002} proves that this measure protects privacy against a variety of attacks, however \citeA{ldiversity2006} show that it has two major shortcomings. The first problem that they point out is the lack of diversity within the sensitive attribute. They reason that the data set can be $k$-anonymous, but if the $k$ tuples of an equivalence class all have the same sensitive value, the attacker can still make inferences about an individual with the appropriate background information, they call this a \textbf{homogeneity attack}. The second shortcoming that \citeA{ldiversity2006} point out is that if an attacker has additional background knowledge he can detect the sensitive information. Referring to example \ref{3ano}, assume a friend of yours, that means having this knowledge, is a high school teacher in the postcode area 10230 with age 32. Additionally, you know that any high school teacher starts with a salary higher than 60 k, now even if you possess only the generalized table T', you can still infer your friend's exact salary. \citeA{ldiversity2006} call this a \textbf{background knowledge attack}.\\
+\\
+By showing that the ideal definition of privacy called \textit{bayes-optimal}, where both, the data publisher and the adversary, have full (and identical) background knowledge, can hardly be guaranteed in a real-world context, \citeA{ldiversity2006} arrive at a practical principle, they call $l$-diversity:
+
+\begin{definition}[$l$-Diversity principle]
+A equivalence class, that is a group of tuples with the same generalized QID, is $l$-diverse if it contains at least $l$ "well-represented" values for the sensitive attribute S. A table is $l$-diverse if every equivalence class is $l$-diverse. \cite{ldiversity2006}
+\end{definition}
+
+\noindent Based on this principle \citeA{ldiversity2006} define five instantiations of $l$-Diversity. With these definitions, they prove that $l$-diversity provides privacy even if the data publisher lacks information about the knowledge possessed by the attacker. Furthermore, they show that existing algorithms for $k$-anonymity can be easily adapted to $l$-diversity, and with experiments they underline that their method is practical and implementable in an efficient way.
+
+\subsection{Streamed data}
+The optimization of \textit{k-anonymity} as well as \textit{l-diversity} was proven to be NP-hard \cite{kanonymitynphard, ldiversitynphard}. In a streamed environment the methods may imply a delay of the publication of all or some tuples. This is especially critical when the utility of the the data decreases with the time that is passed in between data generation, that is, event occurrence, and the time the data is analyzed. A possible application could be a credit card provider, who wishes to outsource the task of credit risk predictions to an external organization, and therefore needs to the stream the transactional data to the service provider, if possible in real-time.\\
+\\
+A natural extension of the two methods introduced in the previous section would be an incremental approach. That means waiting until a certain amount of data has arrived and subsequently treating this data as if it were a static data set, applying $l$-diversity or $k$-anonymity as described before. \citeA{xiao2007} studied a situation that is closely related to the incremental approach, namely the implications of the previous section's approaches in the context of the re-publication of micro data sets that have been updated with insertions or deletions. \citeA{byun2006} studied privacy attacks on re-publication of datasets with insertions only and developed a solution to effectively prevent those attacks. \citeA{xiao2007} start from this solution and extend it by the possibility of deletions in order to preserve privacy in fully dynamic datasets. The problem inherent in re-publication is illustrated by the following example:
+
+\begin{example}[The re-publication problem of varying diversity]
+Consider the following equivalence class is part of a published and generalized dataset:
+\begin{table}[H]
+\centering
+\begin{tabular}{llll}
+\toprule
+postcode & occupation     & age       & income \\ \midrule
+2103*    & medical doctor & (38-46{]} & 95 k   \\
+2103*    & medical doctor & (38-46{]} & 110 k  \\ \bottomrule
+\end{tabular}
+\caption{Equivalence class in first release}
+\label{ecRelease1}
+\end{table}
+Now consider a republication of the dataset where the previous equivalence class becomes the following:
+\begin{table}[H]
+\centering
+\begin{tabular}{llll}
+\toprule
+postcode & occupation     & age       & income \\ \midrule
+2103*    & medical doctor & (38-46{]} & 95 k   \\
+2103*    & medical doctor & (38-46{]} & 65 k  \\ \bottomrule
+\end{tabular}
+\caption{Equivalence class in second release}
+\label{ecRelease2}
+\end{table}
+An adversary having the following knowledge about an individual \{21031, dentist, 40\}, and knowing that the individual had to be present in both releases, can now infer that this individual's income must be 95 k, due to the fact that the diversity has changed.
+\end{example}
+
+\noindent To tackle the shortcoming illustrated in the previous example, \citeA{xiao2007} introduced two new methods, first of all $m$-variance and a new generalization technique called \textit{counterfeit generalization}. The idea behind these approaches is to add so called counterfeit tuples to equivalence classes where necessary, in order to preserve the original diversity, and add accompanying statistics about in which equivalence class these counterfeit tuples were added in order to enhance the effectiveness of data analysis. They find that the a key characteristic for preserving privacy in re-publication is to ensure a certain "in-variance" in all the equivalence classes. While this approach works well for re-publication in the case of minor insertions and incremental enhancements to data sets, for a data stream it is very impractical for various reasons. One of the reasons is that streams are characterized by high velocities and frequencies at which the data arrives, these large volumes will result in problems in the case of re-publication, since the data set will always be growing, and the previously mentioned methods will require several scans through the table to be published. Furthermore, since the utility of the data decreases with the time that has passed, there is no reason to republish the data again. The goal is to publish the data as fast as possible, one it arrived. Another reason is the characteristic of a data stream that as soon as the anonymized data stream is output, it can not be revisited again. Therefore, the previously mentioned problem of an adversary being able to analyse two releases jointly is not applicable to the streaming scenario.\\
+\\
+\citeA{li2008} were the first researchers to adapt the $k$-anonymity approach entirely to a streaming setting. They propose an algorithm that guarantees $k$-anonymity and furthermore their algorithm poses a constraint on the degree of how much "out-of-order" the output stream is compared to the input. Additionally, the goal of the algorithm is to retain as much information in the outputted stream. 
+Experiments show that the algorithm is effective and efficient \cite{li2008}. \citeA{CpppOfDataStreams} go further and developed an approach that considers both the distribution of the data values to be released and the statistical distribution of the data stream, which resulted in various anonymization quality measures and a group of randomized methods. With these approaches \citeA{CpppOfDataStreams} tackle the problem of heavy information loss in the case of outliers, that the previous methods can't cope with. Their algorithm makes the decision whether a set of elements should be anonymized and released at a certain point of time, based on the current information loss compared to a later release, where the expected future information loss is inferred from the statistical distribution of the data in the stream.\\
+\\
+Having discussed the pitfalls and advantages of the previously conducted research in the field, we are now ready to introduce our novel approach in the next section, that is based on a combination of the SKY-algorithm by \citeA{li2008} and the findings of \citeA{CpppOfDataStreams}, but extends it and applies it in a parallel computation environment. There will be more details about the two approaches provided in the description of our algorithm.
